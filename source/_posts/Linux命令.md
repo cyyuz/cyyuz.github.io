@@ -183,10 +183,6 @@ categories:
         <td> 剪切本行光标所在位置后的全部内容 </td>
     </tr>
     <tr>
-        <td>dd</td>
-        <td> 剪切光标所在行 </td>
-    </tr>
-    <tr>
         <td>3dd</td>
         <td> 剪切光标所在行开始的3行 </td>
     </tr>
