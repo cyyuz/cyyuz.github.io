@@ -69,5 +69,4 @@ Markdown 本身不支持表格的单元格合并，但允许嵌入 HTML 代码�
 <table><tr><td bgcolor=#f3fafb> 红色背景 </td></tr></table>
 ```
 
-<table><tr><td bgcolor=#f3fafb><font  face="宋体"> 小字体 </font></td></tr></table>
-
+<table><tr><td bgcolor=#eef7f2><font  face="宋体" > 小字体 </font></td></tr></table>
