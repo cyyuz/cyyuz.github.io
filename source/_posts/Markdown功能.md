@@ -39,3 +39,35 @@ Markdown 本身不支持表格的单元格合并，但允许嵌入 HTML 代码�
   </tr>  
 </table>
 ```
+# 字体
+
+- 字体
+```
+<font face="宋体">宋体</font>
+<font face="楷书">楷书</font>
+<font face="草书">草书</font>
+<font face="隶书">隶书</font>
+<font face="行书">行书</font>
+<font face="黑体">黑体</font>
+<font face="仿宋">仿宋</font>
+<font face="篆书">篆书</font>
+<font face="仿宋_GB2312">仿宋_GB2312</font>
+<font face="微软雅黑">微软雅黑</font>
+<font face="Times New Roman">Times New Roman</font>
+```
+- 颜色
+```
+<font color=#f3fafb> 红色 </font>
+```
+- 字体大小
+```
+<font size=1> 小字体 </font>
+```
+
+- 背景色
+```
+<table><tr><td bgcolor=#f3fafb> 红色背景 </td></tr></table>
+```
+
+<table><tr><td bgcolor=#f3fafb><font  face="宋体"> 小字体 </font></td></tr></table>
+
