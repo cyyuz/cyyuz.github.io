@@ -3,7 +3,7 @@ title: Linux命令
 date: 2024-06-18 11:12:56
 tags: [linux, vim]
 categories:
-- [code, linux]
+- [技术, linux]
 ---
 
 

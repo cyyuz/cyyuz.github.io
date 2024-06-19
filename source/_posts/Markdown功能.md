@@ -3,7 +3,7 @@ title: Markdown功能
 date: 2024-06-18 15:01:23
 tags: [markdown, html]
 categories:
-- [code, markdown]
+- [技术, markdown]
 ---
 
 # HTML表格
