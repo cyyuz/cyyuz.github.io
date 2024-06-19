@@ -7,7 +7,7 @@ categories:
 ---
 
 
-# vim命令
+# vim
 
 <table>
     <tr> 
@@ -275,3 +275,9 @@ categories:
         <td>对光标当前所在的位置的字符进行大小写转换</td>
     </tr>
 </table>
+
+
+# scp
+
+
+# 
