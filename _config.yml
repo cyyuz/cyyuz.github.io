@@ -103,5 +103,5 @@ theme: fluid
 deploy:
   type: git
   # repo: https://github.com/cyyuz/cyyuz.github.io.git
-  repo: git@47.92.88.51:/var/repo/blog.git # 云服务器
+  repo: git@47.92.88.51:/var/repo/blog.git # 服务器
   branch: master
