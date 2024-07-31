@@ -6,29 +6,39 @@ categories:
 - [QT]
 ---
 
-# 数据类型
+## 输出
+
+qDebug() << a;
 
 # 信号与槽机制
 
-# 字符串类型
+# 数据类型
 
-# 常用数据类型
+## 基本数据类型
 
-# QMap
 
-# Qhash
 
-# QVector
+## QString
 
-# QList
+- +
 
-# QLinkeList
 
-# QVariant
 
-# 常用算法
+## QMap
 
-# 正则表达式
+## Qhash
+
+## QVector
+
+## QList
+
+## QLinkeList
+
+## QVariant
+
+## 常用算法
+
+## 正则表达式
 
 # 常用开发控件
 
@@ -46,4 +56,26 @@ categories:
 
 ## Input_Display
 2:20
+
+# 布局、对话框
+
+## QLayout 
+
+## QStacked Widget
+
+## QSplitter
+
+## QDockWidget
+
+## 文件对话框
+
+## 颜色对话框
+
+## 字体对话框
+
+## 输入对话框
+
+## 消息对话框
+
+## 自定义对话框
 
