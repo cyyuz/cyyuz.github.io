@@ -38,7 +38,7 @@ QDebug类提供的qDebug()函数，是Qt框架中用于调试输出的工具，�
 | qint32                | int                | 有符号的32位整数。                                           |
 | qint64 \| qlonglong   | long long          | 有符号的64位整数。                                           |
 | qintptr \| qptrdiff   | qint32 \| qint64   | 指针类型，在32位系统上是qint32，在64位系统上是qint64。       |
-| qreal                 | double \| float    | 浮点数，默认为double，除非在编译时使用了-qreal float选项，则为float。 |
+| qreal                 | double \| float    | 浮点数，默认为double，当编译时使用-qreal float选项，则为float。 |
 | quint8 \| uchar       | unsigned char      | 无符号的8位整数。                                            |
 | quint16 \| ushort     | unsigned short     | 无符号的16位整数。                                           |
 | quint32 \| uint       | unsigned int       | 无符号的32位整数。                                           |
@@ -88,17 +88,25 @@ Qt中的时间类型，用于处理日期和时间。
 
 ## QMap
 
+59
+
 ## Qhash
 
 ## QVector
 
 ## QList
 
+34
+
 ## QLinkeList
 
 ## QVariant
 
+30
+
 ## 常用算法
+
+28
 
 ## 正则表达式
 
@@ -117,14 +125,14 @@ MainWindow、Widget、Dialog
 
 **槽（Slot）**：槽是与信号关联的函数，用于响应信号。当信号被触发时，与之关联的槽函数会被自动调用，执行相应的操作。
 
-信号与槽机制：将槽函数与信号关联，可以定义特定事件发生时应执行的操作。类似于Linux中的信号处理和回调函数，允许程序以解耦的方式处理事件和响应。
+**信号与槽机制**：将槽函数与信号关联，可以定义特定事件发生时应执行的操作。类似于Linux中的信号处理和回调函数，允许程序以解耦的方式处理事件和响应。
 
 2. **QObject::connect**
 
 用于实现信号和槽函数之间的关联。
 
 ```c++
-[static] QMetaObject::Connection QObject::connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
+QMetaObject::Connection QObject::connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
 ```
 
 | 参数     | 类型           | 描述         |
@@ -141,7 +149,7 @@ MainWindow、Widget、Dialog
 
 3. **信号和槽机制特点**
 
-提供了松散耦合的通信方式，不同组件之间的交互更加灵活，但可能会牺牲一定的性能。与直接调用非虚函数相比，通过信号调用槽函数的速度慢，主要原因包括：
+提供了松散耦合的通信方式，不同组件之间的交互更加灵活，但可能会牺牲一定的性能。与直接调用非虚函数相比，通过信号调用槽函数的速度慢：
 
 - 多线程中，信号可能需要排队等待。
 - 需要编组和解组传递的参数。
@@ -252,7 +260,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-5. **构造函数参数 this**
+5. **构造函数参数 `this`**
 
 将`this`作为构造函数参数传递给控件，作用是指定控件的父对象，有以下作用：
 
@@ -260,9 +268,9 @@ int main(int argc, char *argv[])
 2. **事件传递**：在Qt中，事件（如鼠标点击、键盘输入等）会从父控件传递到子控件。通过指定父对象，可以控制事件传递的层次结构。
 3. **布局管理**：在Qt中，布局管理器（如`QGridLayout`）会自动调整控件的大小和位置。将控件添加到布局时，布局管理器会根据控件的父对象来调整它们。通过将`this`作为父对象，可以确保控件被正确地添加到对话框的布局中。
 
-6. **tr()**
+6. **`tr()`**
 
-使用`tr()`函数，将文本标记为可翻译的，实现在应用程序中支持多语言。
+使用`tr()`函数，将文本标记为可翻译的，在应用程序中支持多语言。
 
 ## Layouts
 56
