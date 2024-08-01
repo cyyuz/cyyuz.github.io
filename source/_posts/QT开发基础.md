@@ -6,6 +6,12 @@ categories:
 - [QT]
 ---
 
+# 1 软件安装
+
+## 1.1 安装Qt
+
+下载地址：https://download.qt.io/archive/qt/5.12/
+
 # 1 数据类型
 
 ## 1.1 输出流

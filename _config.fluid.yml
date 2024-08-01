@@ -528,7 +528,7 @@ index:
 # Post Page
 #---------------------------
 post:
-  banner_img: /img/文章头图.png # 文章顶部图片，通用，可以在文章中单独设置
+  banner_img: /img/文章头图.jpg # 文章顶部图片，通用，可以在文章中单独设置
   banner_img_height: 70
   banner_mask_alpha: 0.3
 
@@ -995,7 +995,7 @@ page404:
 #---------------------------
 links:
   enable: true
-  banner_img: /img/友链头图.jpg
+  banner_img: /img/友链头图.png
   banner_img_height: 60
   banner_mask_alpha: 0.3
   # 友链的成员项
