@@ -12,9 +12,9 @@ categories:
 
 下载地址：https://download.qt.io/archive/qt/5.12/
 
-# 1 数据类型
+# 2 数据类型
 
-## 1.1 输出流
+## 2.1 输出流
 
 ```c++
 #include <QDebug>
@@ -25,7 +25,7 @@ qDebug() << str;
 
 性能上 ` printf > std::cout >> qDebug` 。
 
-## 1.2 Qt基本数据类型
+## 2.2 Qt基本数据类型
 
 ```c++
 #include <QtGlobal>
@@ -45,7 +45,7 @@ qDebug() << str;
 | quint64 \| qulonglong | unsigned long long | 无符号64位整形。                                 |
 | quintptr              | quint32 \| qint64  | 指针类型，32位系统是quint32，64位系统是quint64。 |
 
-## 1.3 QString
+## 2.3 QString
 
 | 名称        | 描述                                                         |
 | ----------- | ------------------------------------------------------------ |
@@ -65,7 +65,7 @@ qDebug() << str;
 
 - 输出字符串带有双引号，用 `qPrintable(str)` 去掉双引号。
 
-## 1.4 QBateArray
+## 2.4 QBateArray
 
 存放的是ACCIC码。
 
@@ -75,7 +75,7 @@ qDebug() << str;
 | toLower() | 字符大写转小写。           |
 | toUpper() | 字符小写转大写。           |
 
-## 1.5 QDateTime
+## 2.5 QDateTime
 
 Qt时间类型。
 
@@ -100,9 +100,13 @@ Qt时间类型。
 
 ## 正则表达式
 
-# 2 常用开发控件
+# 3 常用开发控件
 
-## 2.1 信号与槽机制
+## 3.1 基类
+
+MainWindow、Widget、Dialog
+
+## 3.2 信号与槽机制
 
 ## Layouts
 56
