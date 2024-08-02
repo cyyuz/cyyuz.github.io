@@ -40,3 +40,10 @@ sudo ln -s /usr/local/bin/python3 /usr/bin/python3
 ```shell
 python3 --version
 ```
+
+export CPPFLAGS="-I/usr/local/ssl/include"
+export LDFLAGS="-L/usr/local/ssl/lib"
+
+./configure --enable-optimizations --with-openssl=/usr/local/ssl
+make
+sudo make altinstall
