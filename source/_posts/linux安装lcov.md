@@ -10,7 +10,7 @@ categories:
 
 下载地址：[https://github.com/linux-test-project/lcov/releases](https://github.com/linux-test-project/lcov/releases)，下载指定版本源码到服务器。
 
-![alt text](../img/linux安装lcov指定版本/lcov_source_code.png)
+![alt text](../img/linux安装lcov/lcov_source_code.png)
 
 2. 解压压缩包
 
@@ -27,11 +27,12 @@ sudo make install
 
 4. 创建链接
 
-lcov默认安装在 `/usr/local/bin/lcov` ，链接到 `/usr/bin` 目录下。
+lcov默认在 `/usr/local/bin/lcov` ，链接到 `/usr/bin` 目录下。
 
 ```shell
 sudo ln -s /usr/local/bin/lcov /usr/bin/lcov
 ```
+
 5. 验证安装
 
 ```shell

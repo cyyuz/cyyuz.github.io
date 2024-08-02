@@ -10,7 +10,7 @@ categories:
 
 下载地址：[https://github.com/Kitware/CMake/releases](https://github.com/Kitware/CMake/releases)，下载指定版本源码到服务器。
 
-![alt text](../img/linux安装cmake指定版本/cmake.png)
+![alt text](../img/linux安装cmake/cmake.png)
 
 2. 解压压缩包
 
