@@ -309,3 +309,8 @@ int main(int argc, char *argv[])
 
 ## 自定义对话框
 
+# 疑问
+
+MainWindow、Widget、Dialog的区别 
+
+信号 观察者模式
