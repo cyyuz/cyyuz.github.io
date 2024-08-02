@@ -1,5 +1,5 @@
 ---
-title: linux安装cmake指定版本
+title: linux安装cmake
 date: 2024-08-02 15:14:04
 tags: [linux, cmake]
 categories:

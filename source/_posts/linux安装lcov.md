@@ -1,5 +1,5 @@
 ---
-title: linux安装lcov指定版本
+title: linux安装lcov
 date: 2024-08-02 13:48:40
 tags: [linux, lcov]
 categories:
