@@ -1,7 +1,7 @@
 ---
 title: linux软件安装
 date: 2024-08-02 15:14:04
-tags: [linux, cmake, openssl, python]
+tags: [linux, cmake, openssl, python, lcov]
 categories:
 - [技术, linux]
 ---
@@ -98,4 +98,34 @@ sudo make altinstall
 
 ```shell
 python3 --version
+```
+
+# 安装lcov
+
+1. 下载源码 
+
+下载地址：[https://github.com/linux-test-project/lcov/releases](https://github.com/linux-test-project/lcov/releases)，下载指定版本源码到服务器。
+
+![alt text](../img/linux软件安装/lcov.png)
+
+2. 编译
+
+```shell
+tar zxvf lcov-1.14.tar.gz
+cd lcov-1.14/
+sudo make install
+```
+
+3. 创建链接
+
+lcov默认在 `/usr/local/bin/lcov` ，链接到 `/usr/bin` 目录下。
+
+```shell
+sudo ln -s /usr/local/bin/lcov /usr/bin/lcov
+```
+
+4. 验证安装
+
+```shell
+lcov --version
 ```
