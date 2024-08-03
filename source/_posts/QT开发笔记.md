@@ -93,7 +93,7 @@ Qt中的时间类型，用于处理日期和时间。
 | `[]`                          | 插入数据或通过key获取value。                                 |
 | `insert()`                    | 插入数据。                                                   |
 | `remove()`                    | 删除数据。                                                   |
-| `insertMulti()`               | 在 `QMap` 中插入相同的key。`QMultiMap` 类型的对象可以直接插入相同的key。 |
+| `insertMulti()`               | 插入相同的key。`QMultiMap` 类型允许 key 相同。                |
 | `iterator` & `const_iterator` | 迭代器。                                                     |
 | `begin()` & `constBegin()`    | 返回指向第一个元素的迭代器。                                 |
 | `end()` & `constEnd()`        | 返回指向最后一个元素之后的位置的迭代器。                     |
