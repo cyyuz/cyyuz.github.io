@@ -97,7 +97,6 @@ Qt中的时间类型，用于处理日期和时间。
 | `iterator` & `const_iterator` | 迭代器。                                                     |
 | `begin()` & `constBegin()`    | 返回指向第一个元素的迭代器。                                 |
 | `end()` & `constEnd()`        | 返回指向最后一个元素之后的位置的迭代器。                     |
-| ``                            |                                                              |
 | `value()`                     | 查找key对应的value。                                         |
 | `key()`                       | 查询value对应的key。                                         |
 | `contains()`                  | 是否包含key。                                                |
