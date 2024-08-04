@@ -12,7 +12,7 @@ categories:
 
 下载地址：[https://github.com/Kitware/CMake/releases](https://github.com/Kitware/CMake/releases)，下载指定版本源码到服务器。
 
-![](../img/linux软件安装/cmake.png)
+![](img/linux软件安装/cmake.png)
 
 2. 编译
 
@@ -79,7 +79,7 @@ sudo apt-get install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libn
 
 下载地址：[https://www.python.org/ftp/python/](https://www.python.org/ftp/python/)，下载指定版本源码到服务器。
 
-![alt text](../img/linux软件安装/python.png)
+![alt text](img/linux软件安装/python.png)
 
 3. 编译
 
@@ -106,7 +106,7 @@ python3 --version
 
 下载地址：[https://github.com/linux-test-project/lcov/releases](https://github.com/linux-test-project/lcov/releases)，下载指定版本源码到服务器。
 
-![alt text](../img/linux软件安装/lcov.png)
+![alt text](img/linux软件安装/lcov.png)
 
 2. 编译
 
