@@ -603,8 +603,28 @@ Widget::~Widget()
 }
 ```
 
-## Buttons
+## 3.4 Buttons
+
+**Buttons控件：**
+
+| 控件名称            | 描述           |
+| ------------------- | -------------- |
+| Push Button         | 命令按钮。     |
+| Tool Button         | 工具按钮。     |
+| Radio Button        | 单选按钮。     |
+| Check Box           | 复选框按钮。   |
+| Command Link Button | 命令链接按钮。 |
+| Dialog  Button Box  | 按钮盒。       |
+
+1. **Push Button**
+
+```c++
+```
+
+2. **Tool Button**
+
 1:26  + 1:51
+
 ## Containers
 
 ## ItemViews
