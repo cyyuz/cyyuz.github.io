@@ -49,21 +49,22 @@ QDebug类提供的qDebug()函数，是Qt框架中用于调试输出的工具，�
 
 用于处理Unicode字符串的类。
 
-| 函数         | 描述                                                         |
-| ------------ | ------------------------------------------------------------ |
-| +/+=         | 连接两个字符串。                                             |
-| append()     | 等同于+=，将字符串追加到当前字符串的末尾。                   |
-| sprintf()    | 类似于`sprintf()`，用于格式化字符串并返回结果。              |
-| arg()        | 类似于`printf()`，提供类型安全的字符串格式化，支持Unicode，可以改变参数的顺序。 |
-| insert()     | 在指定位置插入字符串。                                       |
-| prepend()    | 在开头插入字符串。                                           |
-| replace()    | 替换字符串中的部分内容。                                     |
-| startsWith() | 是否以指定的字符串开始。第二个参数 `Qt::CaseInsensitive` / `Qt::CaseSensitive` 设置大小写敏感。 |
-| endsWith()   | 是否以指定的字符串结束。                                     |
-| contains()   | 是否包含指定的字符串。                                       |
-| toInt()      | 转换为整数。类似的函数有`toDouble()`、`toFloat()`、`toLong()`等。 |
-| compare()    | 比较两个字符串。                                             |
-| toUtf8()     | 将字符串转换为`QByteArray`类型。                             |
+| 函数            | 描述                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `+/+=`          | 连接两个字符串。                                             |
+| `append()`      | 等同于+=，将字符串追加到当前字符串的末尾。                   |
+| `sprintf()`     | 类似于`sprintf()`，用于格式化字符串并返回结果。              |
+| `arg()`         | 类似于`printf()`，提供类型安全的字符串格式化，支持Unicode，可以改变参数的顺序。 |
+| `insert()`      | 在指定位置插入字符串。                                       |
+| `prepend()`     | 在开头插入字符串。                                           |
+| `replace()`     | 替换字符串中的部分内容。                                     |
+| `startsWith()`  | 是否以指定的字符串开始。第二个参数 `Qt::CaseInsensitive` / `Qt::CaseSensitive` 设置大小写敏感。 |
+| `endsWith()`    | 是否以指定的字符串结束。                                     |
+| `contains()`    | 是否包含指定的字符串。                                       |
+| `toInt()`       | 转换为整数。类似的函数有 `toDouble()`、`toFloat()`、`toLong() `等。 |
+| `compare()`     | 比较两个字符串。                                             |
+| `toUtf8()`      | 将字符串转换为 `QByteArray` 类型。                           |
+| `toStdString()` | 转换为 `std::string` 。                                      |
 
 - 当输出字符串时，如果需要去除两边的双引号，可以使用`qPrintable(str)`来实现。
 
@@ -143,13 +144,53 @@ QLinkedList 是一个双向链表，不支持通过索引访问元素，但在�
 | ---- | ------------------ |
 | `<<` | 向链表中插入元素。 |
 
-## QVariant
+## 2.9 QVariant
 
-30
+`QVariant` 本质为C++ `union` 数据类型，可以保存很多Qt类型的值。
 
+**常用成员函数：**
 
+| 函数              | 描述                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| `type()`          | 返回当前 `QVariant` 对象中存储的数据类型。                   |
+| `canConvert()`    | 检查 `QVariant` 对象是否可以转换为指定的数据类型。           |
+| `value()`         | 返回 `QVariant` 对象中存储的值，需要显式指定返回值的类型。   |
+| `qvariant_cast()` | 用于将 `QVariant` 对象转换为指定类型，类似于 `dynamic_cast`。 |
 
-## 迭代器
+**常用枚举类型：**
+
+| 变量                   | 类型           |
+| ---------------------- | -------------- |
+| `QVariant::Invalid`    | 无效类型       |
+| `QVariant::Time`       | `QTime`        |
+| `QVariant::Region`     | `QRegion`      |
+| `QVariant::Line`       | `QLine`        |
+| `QVariant::Palette`    | `QPalette`     |
+| `QVariant::Bitmap`     | `QBitmap`      |
+| `QVariant::Bool`       | `bool`         |
+| `QVariant::List`       | `QList`        |
+| `QVariant::Brush`      | `QBrush`       |
+| `QVariant::SizePolicy` | `QSizePolicy`  |
+| `QVariant::Size`       | `QSize`        |
+| `QVariant::String`     | `QString`      |
+| `QVariant::Char`       | `QChar`        |
+| `QVariant::Map`        | `QMap`         |
+| `QVariant::Color`      | `QColor`       |
+| `QVariant::StringList` | `QStringList`  |
+| `QVariant::Cursor`     | `QCusor`       |
+| `QVariant::Point`      | `QPoint`       |
+| `QVariant::Date`       | `QDate`        |
+| `QVariant::Pen`        | `QPen`         |
+| `QVariant::DateTime`   | `QDateTime`    |
+| `QVariant::Pixmap`     | `QPixamp`      |
+| `QVariant::Double`     | `double`       |
+| `QVariant::Rect`       | `QRect`        |
+| `QVariant::Font`       | `QFont`        |
+| `QVariant::Image`      | `QImage`       |
+| `QVariant::Icon`       | `QIcon`        |
+| `QVariant::UserType`   | 用户自定义类型 |
+
+## 2.10 迭代器
 
 1. **c++风格**
 
@@ -181,11 +222,16 @@ Qt 容器类型如 `QString`、`QByteArray`、`QMap`、`QHash`、`QVector`、`QL
 | `hasNext()` | 检查是否存在下一个元素。返回一个布尔值，如果存在下一个元素，则返回 `true`，否则返回 `false`。 |
 | `next()`    | 移动到下一个元素，必须在 `hasNext()` 返回 `true` 后调用。    |
 
-## 常用算法
+## 2.11 常用算法
 
-28
+| 函数          | 描述                                  |
+| ------------- | ------------------------------------- |
+| `qAbs(x)`     | 返回参数 `x` 的绝对值。               |
+| `qMax(x, y)`  | 返回参数 `x` 和 `y` 中的最大值。      |
+| `qRound(x)`   | 将浮点数 `x` 四舍五入到最接近的整数。 |
+| `qSwap(x, y)` | 交换参数 `x` 和 `y` 的值。            |
 
-## 正则表达式
+## 2.12 正则表达式
 
 # 3 常用开发控件
 
