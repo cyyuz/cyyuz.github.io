@@ -618,10 +618,71 @@ Widget::~Widget()
 
 1. **Push Button**
 
+mainwindow.h
+
 ```c++
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QPushButton>
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+private:
+    QPushButton *pushButton1, *pushButton2;
+private slots:
+    void PushButtonClicked1();
+    void PushButtonClicked2();
+};
+#endif // MAINWINDOW_H
+```
+
+mainwindow.cpp
+
+```c++
+#include "mainwindow.h"
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    // 设置窗口位置和大小
+    this->setGeometry(600,600,300,300);   
+    pushButton1 = new QPushButton("命令按钮1", this);
+    pushButton2 = new QPushButton("命令按钮2", this);
+	
+    // 设置命令按钮位置和大小
+    pushButton1->setGeometry(20,20,100,30);   	
+    pushButton2->setGeometry(20,60,100,30);
+
+    connect(pushButton1, SIGNAL(clicked()), this, SLOT(PushButtonClicked1()));
+    connect(pushButton2, SIGNAL(clicked()), this, SLOT(PushButtonClicked2()));
+}
+
+MainWindow::~MainWindow()
+{
+}
+
+void MainWindow::PushButtonClicked1(){
+    this->setStyleSheet("QMainWindow {background-color:rgba(255, 255, 0, 100%);}");  // 设置窗口样式
+}
+
+void MainWindow::PushButtonClicked2(){
+    this->setStyleSheet("QMainWindow {background-color:rgba(255, 0, 0, 100%);}");
+}
 ```
 
 2. **Tool Button**
+
+
+
+
+
+
 
 1:26  + 1:51
 
