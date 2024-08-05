@@ -638,12 +638,13 @@ mainwindow.cpp
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    // 设置窗口位置和大小
-    this->setGeometry(600,600,300,300);   
+    // Set the window position and size
+    this->setGeometry(600,600,300,300); 
+        
     pushButton1 = new QPushButton("命令按钮1", this);
     pushButton2 = new QPushButton("命令按钮2", this);
 	
-    // 设置命令按钮位置和大小
+    // Set the pushButton's position and size
     pushButton1->setGeometry(20,20,100,30);   	
     pushButton2->setGeometry(20,60,100,30);
 
@@ -662,13 +663,201 @@ void MainWindow::PushButtonClicked2(){
 
 2. **Tool Button**
 
+```c++
+// mainwindow.h
 
+#include <QToolBar>
+#include <QToolButton>
 
+class MainWindow : public QMainWindow
+{
+private:
+    QToolBar *toolBar;         
+    QToolButton *toolButton;   
+};
+```
 
+```c++
+// mainwindow.cpp
 
+#include <QApplication>
+#include <QStyle>
 
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    this->setGeometry(600, 600, 300, 300);
 
-1:26  + 1:51
+    toolBar = new QToolBar(this);
+    toolBar->setGeometry(100, 100, 100, 80);
+
+    // Get the application's style and get the standard icon for help
+    QStyle *style = QApplication::style();
+    QIcon icon = style->standardIcon(QStyle::SP_TitleBarContextHelpButton);
+
+    // Create a new tool button with the help icon
+    toolButton = new QToolButton(this);
+    toolButton->setIcon(icon);
+
+    // Set the button's text and display style (icon on top, text below)
+    toolButton->setText("帮助");
+    toolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    // Add the tool button to the toolbar
+    toolBar->addWidget(toolButton);
+}
+```
+
+3. **RadioButton**
+
+```c++
+#include <QRadioButton>
+class MainWindow : public QMainWindow
+{
+private:
+    QRadioButton *radioButton1, *radioButton2;
+};
+```
+
+```c++
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    radioButton1 = new QRadioButton(this);
+    radioButton2 = new QRadioButton(this);
+
+    radioButton1->setGeometry(0, 0, 100, 40);
+    radioButton2->setGeometry(0, 50, 100, 40);
+	
+    // Set radioButton's text
+    radioButton1->setText("button1");
+    radioButton2->setText("button2");
+	
+    // Set radioButton's initial checked statesuttons
+    radioButton1->setChecked(true);
+    radioButton2->setChecked(false);
+}
+```
+
+4. **CheckBox**
+
+```c++
+#include <QCheckBox>
+class MainWindow : public QMainWindow
+{
+private:
+    QCheckBox *checkBox;
+private slots:
+    void CheckBoxClicked(int);
+};
+```
+
+```c++
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    checkBox = new QCheckBox(this);
+    checkBox->setGeometry(0, 0, 100, 40);
+
+    // Set the initial state of checkBox
+    checkBox->setCheckState(Qt::Checked);
+    checkBox->setText("checked");
+    // Enable the treble state mode: ckecked unckecked partiallychecked
+    checkBox->setTristate();
+
+    connect(checkBox, SIGNAL(stateChanged(int)), this, SLOT(CheckBoxClicked(int)));
+}
+void MainWindow::CheckBoxClicked(int state){
+    switch (state) {
+    case Qt::Checked:
+        checkBox->setText("ckecked");
+        break;
+    case Qt::Unchecked:
+        checkBox->setText("unckecked");
+        break;
+    case Qt::PartiallyChecked:
+        checkBox->setText("partiallychecked");
+        break;
+    default:
+        break;
+    }
+}
+```
+
+5. **CommandLinkButton**
+
+```c++
+#include <QCommandLinkButton>
+
+class MainWindow : public QMainWindow
+{
+private:
+    QCommandLinkButton *linkButton;
+private slots:
+    void LinkButtonClicked();
+};
+```
+
+```c++
+#include <QDesktopServices>
+#include <QUrl>
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    linkButton = new QCommandLinkButton("command link button test", "clicked", this);
+    linkButton->setGeometry(0, 0, 300, 40);
+    connect(linkButton, SIGNAL(clicked()), this, SLOT(LinkButtonClicked()));
+}
+
+void MainWindow::LinkButtonClicked(){
+    QDesktopServices::openUrl(QUrl("www.baidu.com"));
+}
+```
+
+6. **DialogButtonBox**
+
+```c++
+#include <QDialogButtonBox>
+#include <QPushButton>
+
+class MainWindow : public QMainWindow
+{
+private:
+    QDialogButtonBox *dialogButtonBox;
+    QPushButton *pushButton;
+private slots:
+    void dialogButtonBoxClicked(QAbstractButton *);
+};
+```
+
+```c++
+#include <QDebug>
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    this->setGeometry(300, 300, 500, 500);
+    dialogButtonBox = new QDialogButtonBox(this);
+    dialogButtonBox->setGeometry(200, 200, 200, 40);
+    dialogButtonBox->addButton(QDialogButtonBox::Cancel);
+    dialogButtonBox->button(QDialogButtonBox::Cancel)->setText("cancel");
+
+    pushButton = new QPushButton("continue", this);
+    dialogButtonBox->addButton(pushButton, QDialogButtonBox::ActionRole);
+        
+    connect(dialogButtonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(dialogButtonBoxClicked(QAbstractButton *)));
+}
+
+void MainWindow::dialogButtonBoxClicked(QAbstractButton *abstractButton){
+    if(abstractButton == dialogButtonBox->button(QDialogButtonBox::Cancel)){
+        qDebug() << "cancel" << endl;
+    }
+    else if(abstractButton == pushButton){
+        qDebug() << "continue" << endl;
+    }
+}
+```
 
 ## Containers
 
