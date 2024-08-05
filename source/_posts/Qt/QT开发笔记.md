@@ -438,10 +438,6 @@ Dialog::Dialog(QWidget *parent)
     connect(pushButton, SIGNAL(clicked()), this, SLOT(CalculateSphereVolume()));  
 }
 
-Dialog::~Dialog()
-{
-}
-
 void Dialog::CalculateSphereVolume(){
     bool isLoop;
     QString tmpStr;
@@ -561,10 +557,6 @@ Widget::Widget(QWidget *parent)
 
     setLayout(gridLayout); // 设置为主布局
 }
-
-Widget::~Widget()
-{
-}
 ```
 
 **表单布局示例代码：**
@@ -596,10 +588,6 @@ Widget::Widget(QWidget *parent)
 
     // 设置标签的对齐方式
     formLayout->setLabelAlignment(Qt::AlignLeft); // 标签左对齐
-}
-
-Widget::~Widget()
-{
 }
 ```
 
@@ -661,10 +649,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(pushButton1, SIGNAL(clicked()), this, SLOT(PushButtonClicked1()));
     connect(pushButton2, SIGNAL(clicked()), this, SLOT(PushButtonClicked2()));
-}
-
-MainWindow::~MainWindow()
-{
 }
 
 void MainWindow::PushButtonClicked1(){
