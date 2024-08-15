@@ -7,3 +7,4 @@ categories:
 index_img: img/C++/STL.jpg
 ---
 
+# std::function

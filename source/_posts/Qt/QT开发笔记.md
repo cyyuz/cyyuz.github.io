@@ -4,7 +4,7 @@ date: 2024-06-29 17:15:20
 tags:
 categories:
 - [QT]
-index_img: img/qt_icon.png
+index_img: img/QT/qt_icon.png
 ---
 
 # 1 软件安装
