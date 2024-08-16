@@ -9,21 +9,19 @@ index_img: img/C++/C++11.jpg
 
 # auto & decltype
 
-auto &
+auto 关键字使用已声明变量的初始化表达式或 lambda 表达式参数来推导其类型。
 
-```cpp
-auto &a = b;
+```c++
+// 初始化
+auto a {42};
+auto b = 42;
 ```
 
-auto &a = b;  a是b的引用，a的类型是b的类型。
+当 auto 用于在基于范围的 for 语句中声明循环参数时，它使用不同的初始化语法，例如for (auto& i : iterable) do_action(i);。 有关详细信息，请参阅基于范围的 for 语句 (C++)。
 
-decltype
+auto 关键字是类型的占位符，但它本身不是类型。 因此，auto 关键字不能用于强制转换或运算符，如 sizeof 和typeid。
 
-```cpp
-decltype(b) a = b;
-```
 
-decltype(a) a = b;  a的类型是b的类型，a的值是b的值。
 
 # 智能指针
 
