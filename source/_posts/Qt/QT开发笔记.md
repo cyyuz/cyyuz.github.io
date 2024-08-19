@@ -860,10 +860,23 @@ void MainWindow::dialogButtonBoxClicked(QAbstractButton *abstractButton){
 }
 ```
 
-## Containers
+## 3.5 Containers
+
+**Containers控件：**
+
+| 控件名称    | 描述                               |
+| ----------- | ---------------------------------- |
+| Group Box   | 组合框。提供带有标题的组合框框架。 |
+| Scroll Area | 滚动区域。                         |
+| Tab Widget  | 标签小部件。                       |
+| Frame       | 框架。                             |
+| Dock Widget | 停靠窗口部件。                     |
+
+
 
 ## ItemViews
 1:51
+
 ## ItemWidgets
 
 ## Input_Display
