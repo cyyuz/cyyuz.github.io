@@ -1,13 +1,35 @@
 ---
-title: C++11
-date: 2024-08-14 10:20:48
+title: C++
+date: 2024-06-18 17:49:12
 tags:
 categories:
 - [技术, cpp]
-index_img: img/C++/C++11.jpg
+index_img: img/C++/C++.jpg
 ---
 
-# 类型推导
+重载函数
+
+指针引用
+
+引用与函数
+
+const
+
+右值引用
+
+匿名函数
+
+正则表达式
+
+内存：堆栈
+
+# 声明
+
+## inline
+
+# c++11
+
+## 类型推导
 
 - auto
 
@@ -33,7 +55,7 @@ decltype(123) a;    // int
 decltype("123") b = "456";  // char const [4]
 ```
 
-# 范围for循环
+## 范围for循环
 
 适用于所有支持 `begin()` 和 `end()` 的函数，或者原生数组。
 
@@ -44,7 +66,7 @@ for (auto a : {1, 2, 3, 4}) {
 }
 ```
 
-# lambda表达式
+## lambda表达式
 
 lambda 表达式用于定义并创建匿名函数对象，它可以捕获其所在作用域中的变量，并可以在其作用域内执行。
 
@@ -62,7 +84,7 @@ auto func = [](int a, int b) -> bool {
 std::cout << typeid(func).name() << std::endl;   // class `int __cdecl main(void)'::`2'::<lambda_1>
 ```
 
-# 智能指针
+## 智能指针
 
 智能指针是封装了原生指针的类，自动管理动态内存，防止内存泄漏和其他与手动管理内存相关的错误。C++11 提供了三种标准的智能指针类型：std::unique_ptr、std::shared_ptr 和 std::weak_ptr。
 
@@ -70,7 +92,7 @@ std::cout << typeid(func).name() << std::endl;   // class `int __cdecl main(void
 
 - **unique_ptr**
 
-`unique_ptr` 是独占所有权的智能指针，表示某个资源（如动态分配的内存）只能有一个 std::unique_ptr 拥有，不允许其他的智能指针共享其所有权。无法复制到其他 `unique_ptr`，无法通过值传递到函数，也无法用于需要副本的任何 C++ 标准库算法。 只能移动 `unique_ptr`，内存资源所有权将转移到另一 `unique_ptr`，并且原始 `unique_ptr` 不再拥有此资源。 
+`unique_ptr` 独占所有权的智能指针，同一时间只能有一个 `unique_ptr` 指向特定内存。不能复制到其他 `unique_ptr`，不能通过值传递到函数，只能移动 `unique_ptr`，内存资源所有权将转移到另一个 `unique_ptr`，原来的 `unique_ptr` 不再拥有此资源。 
 
 当 `unique_ptr` 超出作用域时，会自动删除所管理的对象。
 
@@ -98,27 +120,61 @@ int* b = ptr4.release();
 
 - **shared_ptr**
 
-`shared_ptr` 初始化一个 shared_ptr 之后，您可复制它，按值将其传入函数参数，然后将其分配给其他 shared_ptr 实例。 所有实例均指向同一个对象，并共享对一个“控制块”（每当新的 shared_ptr 添加、超出范围或重置时增加和减少引用计数）的访问权限。 当引用计数达到零时，控制块将删除内存资源和自身。
+共享所有权的智能指针，多个 `shared_ptr` 可以指向同一内存，内存在最后一个 `shared_ptr` 被销毁时释放。
+
+`shared_ptr` 初始化一个 shared_ptr 之后，按值将其传入函数参数，然后将其分配给其他 shared_ptr 实例。 所有实例均指向同一个对象，并共享对一个“控制块”（每当新的 shared_ptr 添加、超出范围或重置时增加和减少引用计数）的访问权限。 当引用计数达到零时，控制块将删除内存资源和自身。
 
 shared_ptr是共享所有权的智能指针，它允许多个智能指针共享同一个对象，当最后一个shared_ptr被销毁时，对象才会被销毁。
 
 ```cpp
-std::shared_ptr<int> p1(new int(10)); // 创建一个指向int类型的shared_ptr，并初始化为10
-std::shared_ptr<int> p2 = p1; // p2和p1共享同一个对象
+#include <iostream>
+#include <memory>
+
+class MyClass {
+public:
+    void doSomething() {
+        std::cout << "Doing something" << std::endl;
+    }
+};
+
+int main() {
+    std::shared_ptr<MyClass> myPtr1(new MyClass());
+    std::shared_ptr<MyClass> myPtr2 = myPtr1;
+
+    myPtr1->doSomething(); // 使用 myPtr1 调用成员函数
+    myPtr2->doSomething(); // 使用 myPtr2 调用成员函数
+
+    // 当 myPtr1 和 myPtr2 都被销毁时，MyClass 对象的内存才会被释放
+    return 0;
+}
 ```
 
 - **weak_ptr**
 
 weak_ptr是弱引用的智能指针，它不拥有对象的所有权，也不阻止对象被销毁，但它可以观察对象的生命周期，并在对象被销毁时自动变为空。
 
-```cpp
-std::weak_ptr<int> p1; // 创建一个空的weak_ptr
-std::shared_ptr<int> p2(new int(10)); // 创建一个指向int类型的shared_ptr，并初始化为10
+弱引用智能指针，用于与 `shared_ptr` 配合使用，避免循环引用导致的内存泄漏。
 
-p1 = p2; // p1和p2共享同一个对象
-if (p1.expired()) { // 检查p1是否已经过期
-    std::cout << "p1 has expired" << std::endl;
-} else {
-    std::cout << "p1 is valid" << std::endl;
+```cpp
+#include <iostream>
+#include <memory>
+
+class Node {
+public:
+    std::shared_ptr<Node> next;
+    std::weak_ptr<Node> prev;
+
+    Node() : next(nullptr), prev() {}
+};
+
+int main() {
+    std::shared_ptr<Node> node1 = std::make_shared<Node>();
+    std::shared_ptr<Node> node2 = std::make_shared<Node>();
+
+    node1->next = node2;
+    node2->prev = node1;
+
+    // 循环引用，但使用 weak_ptr 避免了内存泄漏
+    return 0;
 }
 ```
