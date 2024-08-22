@@ -27,7 +27,7 @@ const
 
 ## inline
 
-# c++11
+# c++11新特性
 
 ## 类型推导
 
@@ -177,4 +177,48 @@ int main() {
     // 循环引用，但使用 weak_ptr 避免了内存泄漏
     return 0;
 }
+```
+
+## function和bind
+
+头文件： `<functional>`
+
+- **function**
+
+`std::function` 是一个通用的、多态的函数封装，可以存储、复制和调用任何可调用目标（函数、lambda 表达式、bind 表达式、函数对象等），并具有与存储的可调用目标相同的调用签名。
+
+```cpp
+#include <iostream>
+#include <functional>
+
+void foo(int x) {
+    std::cout << "foo: " << x << std::endl;
+}
+
+int main() {
+    std::function<void(int)> func = foo; // 将函数 foo 绑定到 func
+    func(10); // 调用 func，实际上调用 foo
+
+    return 0;
+}
+```
+
+- **bind**
+
+`std::bind` 是一个函数适配器，它接受一个可调用对象（如函数、函数指针、成员函数指针或 lambda 表达式）以及一些参数，并返回一个新的可调用对象，该对象在调用时将使用提供的参数调用原始可调用对象。
+
+```cpp
+#include <iostream>
+#include <functional>
+
+void foo(int x, double y) {
+    std::cout << "foo: " << x << ", " << y << std::endl;
+}
+
+int main() {
+    auto func = std::bind(foo, 10, std::placeholders::_1); // 将 10 绑定到第一个参数，将第二个参数作为占位符
+    func(3.14); // 调用 func，实际上调用 foo(10, 3.14)
+
+    return 0;
+    }
 ```
