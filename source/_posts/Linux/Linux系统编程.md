@@ -674,55 +674,65 @@ int usleep(useconds_t usec);
 
 # Linux文件操作
 
-## 几个简单的目录操作函数
+## 获取当前工作目录
 
-### 1）获取当前工作目录
+声明：
 
-包含头文件：<unistd.h>
-
+```c++
 char *getcwd(char *buf, size_t size); 
-
 char *get_current_dir_name(void);
+```
 
 示例：
 
-\#include <iostream>
+```c++
+#include <iostream>
+#include <unistd.h>
 
-\#include <unistd.h>
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- char path1[256];  // linux系统目录的最大长度是255。
-
- getcwd(path1,256);
-
- cout << "path1=" << path1 << endl;
-
- 
-
- char *path2=get_current_dir_name();
-
- cout << "path2=" << path2 << endl;
-
- free(path2);  // 注意释放内存。malloc() new delete
-
+int main() {
+    // getcwd
+    char path1[256];   // 256 is the maximum length of a path in Linux
+    getcwd(path1, sizeof(path1));
+    std::cout << "path1=" << path1 << std::endl;
+	
+    // get_current_dir_name
+    char* path2 = get_current_dir_name();
+    std::cout << "path2=" << path2 << std::endl;
+    free(path2);   // free the memory allocated by get_current_dir_name()
 }
+```
 
-### 2）切换工作目录
+## 切换工作目录
 
-包含头文件：<unistd.h>
+声明：
 
+```c++
 int chdir(const char *path);
+```
 
-返回值：0-成功；其它-失败（目录不存在或没有权限）。
+> 返回值：0-成功；其它-失败（目录不存在或没有权限）。
 
-### 3）创建目录
+示例：
+
+```c++
+#include <iostream>
+#include <unistd.h>
+
+int main() {
+    char path[256];   // 256 is the maximum length of a path in Linux
+    getcwd(path, sizeof(path));
+    std::cout << "path=" << path << std::endl;
+
+    if (0 != chdir("..")) {   // change directory to parent directory
+        std::cout << "chdir failed" << std::endl;
+    }
+
+    getcwd(path, sizeof(path));
+    std::cout << "path=" << path << std::endl;
+}
+```
+
+## 创建目录
 
 包含头文件：<sys/stat.h>
 
