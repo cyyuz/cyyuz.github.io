@@ -271,12 +271,6 @@ categories:
         <td>对光标当前所在的位置的字符进行大小写转换</td>
     </tr>
 </table>
-# man
-
-**1-用户命令**；2-系统接口；**3-库函数**；4-特殊文件，比如设备文件；5-文件；
-
-6-游戏；7-系统的软件包；8-系统管理命令；9-内核。
-
 # 编译
 
 ## gcc/g++
@@ -442,77 +436,81 @@ char *getenv(const char *name);
 
 # Linux命令
 
+## man
+
+**1-用户命令**；2-系统接口；**3-库函数**；4-特殊文件，比如设备文件；5-文件；
+
+6-游戏；7-系统的软件包；8-系统管理命令；9-内核。
+
+## ln
+
+
+
 ## scp
+
+## ulimit 
+
+
 
 # Linux时间操作
 
 UNIX操作系统根据计算机产生的年代把1970年1月1日作为UNIX的纪元时间，1970年1月1日是时间的中间点，将从1970年1月1日起经过的秒数用一个整数存放。
 
-## 一、time_t别名
+## time_t
 
-time_t用于表示时间类型，它是一个long类型的别名，在<time.h>文件中定义，表示从1970年1月1日0时0分0秒到现在的秒数。
+`time_t` 用于表示时间类型，是 `long` 类型的别名，在 `<time.h>` 文件中定义，表示从1970年1月1日0时0分0秒到现在的秒数。
 
-typedef long time_t;
+## time()
 
-## 二、time()库函数
+`time()` 库函数用于获取操作系统的当前时间。
 
-time()库函数用于获取操作系统的当前时间。
+```c
+#include <time.h>
 
-包含头文件：<time.h>
-
-声明：
-
+// 声明
 time_t time(time_t *tloc);
 
-有两种调用方法：
+// 1.将空地址传递给time()函数，并将time()返回值赋给变量now。
+time_t now=time(0);  
 
-time_t now=time(0);      // 将空地址传递给time()函数，并将time()返回值赋给变量now。
+// 2.将变量now的地址作为参数传递给time()函数。
+time_t now; 
+time(&now); 
+```
 
-或
+## tm结构体
 
-time_t now; time(&now);  // 将变量now的地址作为参数传递给time()函数。
+`time_t` 是一个长整数，需要转换成 `tm` 结构体，tm结构体在中声明，如下：        
 
-## 三、tm结构体
+```c
+#include <time.h>
 
-time_t是一个长整数，不符合人类的使用习惯，需要转换成tm结构体，tm结构体在<time.h>中声明，如下：         2022-10-01 15:30:25  Oct 1,2022 15:30:25
+struct tm{
+    int tm_year;  // 年份：其值等于实际年份减去1900
+    int tm_mon;  // 月份：取值区间为[0,11]，其中0代表一月，11代表12月
+    int tm_mday; // 日期：一个月中的日期，取值区间为[1,31]
+    int tm_hour;  // 时：取值区间为[0,23]
+    int tm_min;  // 分：取值区间为[0,59]
+    int tm_sec;   // 秒：取值区间为[0,59]
+    int tm_wday; // 星期：取值区间为[0,6]，其中0代表星期天，6代表星期六
+    int tm_yday;  // 从每年的1月1日开始算起的天数：取值区间为[0,365] 
+    int tm_isdst;  // 夏令时标识符，该字段意义不大
+}
+```
 
-struct tm
+## localtime()
 
-{
+`localtime()` 函数用于把 `time_t` 表示的时间转换为 `tm` 结构体表示的时间。
 
- int tm_year;  // 年份：其值等于实际年份减去1900
+`localtime()` 函数不是线程安全的，`localtime_r()` 是线程安全的。
 
- int tm_mon;  // 月份：取值区间为[0,11]，其中0代表一月，11代表12月
+```c
+#include <time.h>
 
- int tm_mday; // 日期：一个月中的日期，取值区间为[1,31]
-
- int tm_hour;  // 时：取值区间为[0,23]
-
- int tm_min;  // 分：取值区间为[0,59]
-
- int tm_sec;   // 秒：取值区间为[0,59]
-
- int tm_wday; // 星期：取值区间为[0,6]，其中0代表星期天，6代表星期六
-
- int tm_yday;  // 从每年的1月1日开始算起的天数：取值区间为[0,365] 
-
- int tm_isdst;  // 夏令时标识符，该字段意义不大
-
-};
-
-## 四、localtime()库函数
-
-localtime()函数用于把time_t表示的时间转换为tm结构体表示的时间。
-
-localtime()函数不是线程安全的，localtime_r()是线程安全的。
-
-包含头文件：<time.h>
-
-函数声明：
-
+// 函数声明：
 struct tm *localtime(const time_t *timep);
-
 struct tm *localtime_r(const time_t *timep, struct tm *result);
+```
 
 示例：
 
