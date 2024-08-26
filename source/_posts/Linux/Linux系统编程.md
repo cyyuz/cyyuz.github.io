@@ -708,6 +708,11 @@ int main() {
 
 ## 创建目录
 
+```
+```
+
+
+
 包含头文件：<sys/stat.h>
 
 int mkdir(const char *pathname, mode_t mode);
