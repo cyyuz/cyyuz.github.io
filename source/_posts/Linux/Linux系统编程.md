@@ -471,14 +471,14 @@ UNIX操作系统根据计算机产生的年代把1970年1月1日作为UNIX的纪
 time_t time(time_t *tloc);
 
 // 1.将空地址传递给time()函数，并将time()返回值赋给变量now。
-time_t now=time(0);  
+time_t now = time(0);  
 
 // 2.将变量now的地址作为参数传递给time()函数。
 time_t now; 
 time(&now); 
 ```
 
-## tm结构体
+## struct tm
 
 `time_t` 是一个长整数，需要转换成 `tm` 结构体，tm结构体在中声明，如下：        
 
@@ -514,55 +514,21 @@ struct tm *localtime_r(const time_t *timep, struct tm *result);
 
 示例：
 
-\#include <iostream>
+```c++
+#include <iostream>
+#include <time.h>
 
-\#include <time.h>   // 时间操作的头文件。
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- time_t now=time(0);       // 获取当前时间，存放在now中。
-
- 
-
- cout << "now=" << now << endl; // 显示当前时间，1970年1月1日到现在的秒数。
-
- 
-
- tm tmnow;
-
- localtime_r(&now,&tmnow);    // 把整数的时间转换成tm结构体。
-
- 
-
- // 根据tm结构体拼接成中国人习惯的字符串格式。
-
- string stime = to_string(tmnow.tm_year+1900)+"-"
-
-​        \+ to_string(tmnow.tm_mon+1)+"-"
-
-​        \+ to_string(tmnow.tm_mday)+" "
-
-​        \+ to_string(tmnow.tm_hour)+":"
-
-​        \+ to_string(tmnow.tm_min)+":"
-
-​        \+ to_string(tmnow.tm_sec);
-
- 
-
- cout << "stime=" << stime << endl;
-
+int main() {
+    time_t time_ = time(0);
+    tm ltm_;
+    localtime_r(&time_, &ltm_);
+    printf("time = %d-%d-%d %d:%d:%d\n", ltm_.tm_year + 1900, ltm_.tm_mon + 1, ltm_.tm_mday, ltm_.tm_hour, ltm_.tm_min, ltm_.tm_sec);
 }
+```
 
-## 五、mktime()库函数
+## mktime()
 
-mktime()函数的功能与localtime()函数相反，用于把tm结构体时间转换为time_t时间。
+`mktime()` 函数的功能与 `localtime()` 函数相反，用于把 `tm` 结构体时间转换为 `time_t` 时间。
 
 包含头文件：<time.h>
 
@@ -660,17 +626,25 @@ int main()
 
 }
 
-## 七、程序睡眠
+## sleep()
 
-如果需要把程序挂起一段时间，可以使用sleep()和usleep()两个库函数。
+声明：
 
-包含头文件：<unistd.h>
-
-函数声明：
-
+```c++
 unsigned int sleep(unsigned int seconds);
-
 int usleep(useconds_t usec);
+```
+
+示例：
+
+```c++
+#include <unistd.h>
+
+int main(){
+    sleep(1);     // 1s
+    usleep(1000); // 1s
+}
+```
 
 # Linux文件操作
 
