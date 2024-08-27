@@ -377,38 +377,49 @@ gdb programe -p PID
 
 ## main函数参数
 
-main函数有三个参数，argc、argv和envp，它的标准写法如下：
+main函数声明：
 
 ```c++
+/**
+ * @brief main函数
+ * @param argc 参数个数，包括程序本身
+ * @param argv 参数值，包括程序本身
+ * @param envp 环境变量，数组的最后一个元素是空
+ * @return 0
+ */
 int main(int argc,char *argv[],char *envp[])
 {
     return 0;
 }
 ```
 
-| 参数 | 描述                                   |
-| ---- | -------------------------------------- |
-| argc | 存放程序参数的个数，包括程序本身。     |
-| argv | 存放每个参数的值，包括程序本身。       |
-| envp | 存放环境变量，数组的最后一个元素是空。 |
+- **设置环境变量**
 
-- 设置环境变量
+函数声明：
 
+```c++
+/**
+ * @brief 设置环境变量
+ * @param name 环境变量名
+ * @param value 环境变量的值
+ * @param overwrite 0-如果环境不存在，增加新的环境变量，如果环境变量已存在，不替换其值；非0-如果环境不存在，增加新的环境变量，如果环境变量已存在，替换其值。
+ * @return 0-成功；-1-失败（失败的情况极少见）
+ */
 int setenv(const char *name, const char *value, int overwrite);
+```
 
-name     环境变量名。
+**注意：**此函数设置的环境变量只对本进程有效，不会影响shell的环境变量。如果在运行程序时执行了 `setenv()` 函数，进程终止后再次运行该程序，上次的设置是无效的。
 
-value     环境变量的值。
+- **获取环境变量的值**
 
-overwrite  0-如果环境不存在，增加新的环境变量，如果环境变量已存在，不替换其值；非0-如果环境不存在，增加新的环境变量，如果环境变量已存在，替换其值。
-
-返回值：0-成功；-1-失败（失败的情况极少见）。
-
-注意：此函数设置的环境变量只对本进程有效，不会影响shell的[环境变量](https://baike.baidu.com/item/环境变量?fromModule=lemma_inlink)。如果在运行程序时执行了setenv()函数，进程终止后再次运行该程序，上次的设置是无效的。
-
-- 获取环境变量的值
-
+```c++
+/**
+ * @brief 获取环境变量的值
+ * @param name 环境变量名
+ * @return 环境变量的值，如果环境变量不存在，返回NULL
+ */
 char *getenv(const char *name);
+```
 
 # Linux命令
 
@@ -438,13 +449,21 @@ UNIX操作系统根据计算机产生的年代把1970年1月1日作为UNIX的纪
 
 ## time()
 
-`time()` 库函数用于获取操作系统的当前时间。
+函数声明：
+
+```c++
+/**
+ * @brief 获取操作系统的当前时间
+ * @param tloc 保存时间的变量，如果为空，函数返回当前时间，不保存。
+ * @return 当前时间
+ */
+time_t time(time_t *tloc);
+```
+
+示例：
 
 ```c
 #include <time.h>
-
-// 声明
-time_t time(time_t *tloc);
 
 // 1.将空地址传递给time()函数，并将time()返回值赋给变量now。
 time_t now = time(0);  
@@ -614,10 +633,13 @@ int main() {
 函数声明：
 
 ```c++
+/**
+ * @brief 切换工作目录
+ * @param path-目录名。
+ * @return 0-成功；其它-失败（目录不存在或没有权限）。
+*/
 int chdir(const char *path);
 ```
-
-> 返回值：0-成功；其它-失败（目录不存在或没有权限）。
 
 示例：
 
@@ -768,6 +790,18 @@ mode参数取值如下：
 
 ## stat()
 
+函数声明：
+
+```c++
+/**
+ * @brief 获取目录或文件的详细信息
+ * @param path-目录或文件名。
+ * @param buf-存放目录或文件的详细信息。
+ * @return 0-成功，-1-失败，errno被设置。
+*/
+int stat(const char *path, struct stat *buf);
+```
+
 数据结构：
 
 ```c++
@@ -810,67 +844,32 @@ S_ISREG(st_mode)
 S_ISDIR(st_mode)
 ```
 
-函数声明：
-
-```c++
-/**
- * @brief 获取目录或文件的详细信息
- * @param path-目录或文件名。
- * @param buf-存放目录或文件的详细信息。
- * @return 0-成功，-1-失败，errno被设置。
-*/
-int stat(const char *path, struct stat *buf);
-```
-
 示例：
 
 ```c++
-\#include <stdio.h>
+#include <iostream>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-\#include <iostream>
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <path>" << std::endl;
+        return -1;
+    }
+    struct stat buf;
+    if (stat(argv[1], &buf) == -1) {
+        std::cerr << "stat(" << argv[1] << "): " << strerror(errno) << std::endl;
+        return -1;
+    }
 
-\#include <cstdio>
-
-\#include <sys/stat.h>
-
-\#include <unistd.h>
-
-using namespace std;
-
- 
-
-int main(int argc,char *argv[])
-
-{
-
- if (argc != 2) { cout << "Using:./demo 文件或目录名\n"; return -1; }
-
- 
-
- struct stat st; // 存放目录或文件详细信息的结构体。
-
- 
-
- // 获取目录或文件的详细信息
-
- if (stat(argv[1],&st) != 0)
-
- {
-
-  cout << "stat(" << argv[1] << "):" << strerror(errno) << endl; return -1;
-
- }
-
- 
-
- if (S_ISREG(st.st_mode))
-
-  cout << argv[1] << "是一个文件(" << "mtime=" << st.st_mtime << ",size=" << st.st_size << ")\n";
-
- if (S_ISDIR(st.st_mode))
-
-cout << argv[1] << "是一个目录(" << "mtime=" << st.st_mtime << ",size=" << st.st_size << ")\n";
-
+    if (S_ISREG(buf.st_mode)) {
+        std::cout << "Regular file" << std::endl;
+    }
+    else if (S_ISDIR(buf.st_mode)) {
+        std::cout << "Directory" << std::endl;
+    }
 }
 ```
 
