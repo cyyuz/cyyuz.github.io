@@ -141,32 +141,7 @@ categories:
         <td> 在光标所在行的行末插入 </td>
     </tr>
     <tr>  
-        <td rowspan="6"> 插入 </td>
-        <td>i</td>
-        <td> 在光标所在位置前面插入 </td>
-    </tr>
-    <tr>
-        <td>a</td>
-        <td> 在光标所在位置后面插入 </td>
-    </tr>
-    <tr>
-        <td>o</td>
-        <td> 在光标所在行的下面插入空白行</td>
-    </tr>
-    <tr>
-        <td>O</td>
-        <td> 在光标所在行的上面插入空白行 </td>
-    </tr>
-    <tr>
-        <td>I</td>
-        <td> 在光标所在行的行首插入 </td>
-    </tr>
-    <tr>
-        <td>A</td>
-        <td> 在光标所在行的行末插入 </td>
-    </tr>
-    <tr>  
-        <td rowspan="6"> 剪切</td>
+        <td rowspan="5"> 剪切</td>
         <td>x</td>
         <td> 剪切光标所在位置的一个字符 </td>
     </tr>
@@ -271,6 +246,7 @@ categories:
         <td>对光标当前所在的位置的字符进行大小写转换</td>
     </tr>
 </table>
+
 # 编译
 
 ## gcc/g++
@@ -745,64 +721,26 @@ struct dirent {
 示例：
 
 ```c++
-```
+#include <dirent.h>
+#include <iostream>
 
-
-
-
-\#include <iostream>
-
-\#include <dirent.h>
-
-using namespace std;
-
- 
-
-int main(int argc,char *argv[])
-
-{
-
- if (argc != 2) { cout << "Using ./demo 目录名\n"; return -1; }
-
- 
-
- DIR *dir;  // 定义目录指针。
-
- 
-
- // 打开目录。
-
- if ( (dir=opendir(argv[1])) == nullptr ) return -1;
-
- 
-
- // 用于存放从目录中读取到的内容。
-
- struct dirent *stdinfo=nullptr;
-
- 
-
- while (1)
-
- {
-
-  // 读取一项内容并显示出来。
-
-  if ((stdinfo=readdir(dir)) == nullptr) break;
-
- 
-
-  cout << "文件名=" << stdinfo->d_name << "，文件类型=" << (int)stdinfo->d_type << endl;
-
- }
-
- 
-
- closedir(dir);  // 关闭目录指针。
-
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cout << "Usage: " << argv[0] << " <directory>" << std::endl;
+        return -1;
+    }
+    DIR* dir;
+    if ((dir = opendir(argv[1])) == nullptr) {
+        std::cout << "Error: open directory " << argv[1] << " failed" << std::endl;
+        return -1;
+    }
+    struct dirent* entry = nullptr;
+    while ((entry = readdir(dir)) != nullptr) {
+        std::cout << "文件名:" << entry->d_name << ", 文件类型:" << entry->d_type << std::endl;
+    }
+    closedir(dir); 
 }
-
-
+```
 
 # Linux系统错误
 
@@ -1162,21 +1100,20 @@ pathname 待删除的目录或文件名。
 
 返回值：0-成功，-1-失败，errno被设置。
 
-
-
 # Linux信号
-
-## 信号的基本概念 
 
 信号（signal）是软件中断，是进程之间相互传递消息的一种方法，用于通知进程发生了事件，但是，不能给进程传递任何数据。
 
-信号产生的原因有很多，在Shell中，可以用kill和killall命令发送信号：
+服务程序运行在后台，如果想让中止它，杀掉不是个好办法，因为进程被杀的时候，是突然死亡，没有安排善后工作。如果向服务程序发送一个信号，服务程序收到信号后，调用一个函数，在函数中编写善后的代码，程序就可以有计划的退出。如果向服务程序发送0的信号，可以检测程序是否存活。
 
-kill -信号的类型 进程编号
+在Shell中，可以用kill和killall命令发送信号：
 
-killall -信号的类型 进程名
+```sh
+kill -9 PID
+killall -9 进程名
+```
 
-## 二、信号的类型 
+- **信号类型** 
 
 | 信号名      | 信号值 | 默认处理动作 | 发出信号的原因                                         |
 | ----------- | ------ | ------------ | ------------------------------------------------------ |
@@ -1215,7 +1152,7 @@ E 信号不能被捕获。
 
 F 信号不能被忽略。
 
-## 三、信号的处理 
+## 信号的处理 
 
 进程对信号的处理方法有三种：
 
@@ -1241,15 +1178,7 @@ sighandler_t signal(int signum, sighandler_t handler);
 
 3）SIG_IGN：忽略参数signum所指的信号。
 
-## 四、信号有什么用
-
-服务程序运行在后台，如果想让中止它，杀掉不是个好办法，因为进程被杀的时候，是突然死亡，没有安排善后工作。
-
-如果向服务程序发送一个信号，服务程序收到信号后，调用一个函数，在函数中编写善后的代码，程序就可以有计划的退出。
-
-如果向服务程序发送0的信号，可以检测程序是否存活。
-
-## 五、信号应用示例 
+## 信号应用示例 
 
 \#include <iostream>
 
@@ -1311,7 +1240,7 @@ int main(int argc,char *argv[])
 
 }
 
-## 六、发送信号
+## 发送信号
 
 Linux操作系统提供了kill和killall命令向进程发送信号，在程序中，可以用kill()函数向其它进程发送信号。
 
@@ -1339,54 +1268,58 @@ sig：准备发送的信号代码，假如其值为0则没有任何信号送出�
 
 有8种方式可以中止进程，其中5种为正常终止，它们是：
 
-1）在main()函数用return返回；
+1）在 `main()` 函数用 `return` 返回；
 
-2）在任意函数中调用exit()函数；
+2）在任意函数中调用` exit()` 函数；
 
-3）在任意函数中调用_exit()或_Exit()函数；
+3）在任意函数中调用 `_exit()` 或 `_Exit()` 函数；
 
-4）最后一个线程从其启动例程（线程主函数）用return返回；
+4）最后一个线程从其启动例程（线程主函数）用 `return` 返回；
 
-5）在最后一个线程中调用pthread_exit()返回；
+5）在最后一个线程中调用 `pthread_exit()` 返回；
 
-异常终止有3种方式，它们是：
+异常终止有3种方式：
 
-6）调用abort()函数中止；
+6）调用 `abort()` 函数中止；
 
 7）接收到一个信号；
 
 8）最后一个线程对取消请求做出响应。
 
-### 一、进程终止的状态
+- **进程终止的状态**
 
-在main()函数中，return的返回值即终止状态，如果没有return语句或调用exit()，那么该进程的终止状态是0。
+在 `main()` 函数中，`return` 的返回值即终止状态，如果没有 `return` 语句或调用 `exit()` ，那么该进程的终止状态是 `0` 。
 
-在Shell中，查看进程终止的状态：echo $?
+在Shell中，查看进程终止的状态：`echo $?`
 
-正常终止进程的3个函数（exit()和_Exit()是由ISO C说明的，_exit()是由POSIX说明的）。
+正常终止进程的3个函数（`exit()` 和 `_Exit()` 是由ISO C说明的，`_exit()` 是由POSIX说明的）。
 
+```c++
 void exit(int status);
-
 void _exit(int status);
-
 void _Exit(int status);
+```
 
 status也是进程终止的状态。
 
-如果进程被异常终止，终止状态为非0。  服务程序的调度、日志和监控
+如果进程被异常终止，终止状态为非0。
 
-### 二、资源释放的问题
+- **资源释放的问题**
 
-retun表示函数返回，会调用局部对象的析构函数，main()函数中的return还会调用全局对象的析构函数。
+`retun` 表示函数返回，会调用局部对象的析构函数，`main()` 函数中的 `return` 还会调用全局对象的析构函数。
 
-**exit()****表示终止进程，不会调用局部对象的**[**析构函数**](https://so.csdn.net/so/search?q=析构函数&spm=1001.2101.3001.7020)**，只调用全局对象的析构函数。**
+`exit()` 表示终止进程，不会调用局部对象的析构函数，只调用全局对象的析构函数。
 
-exit()会执行清理工作，然后退出，_exit()和_Exit()直接退出，不会执行任何清理工作。
+`exit()` 会执行清理工作，然后退出，`_exit()` 和 `_Exit()` 直接退出，不会执行任何清理工作。
 
-### 三、进程的终止函数
+- **进程的终止函数**
 
-进程可以用atexit()函数登记终止函数（最多32个），这些函数将由exit()自动调用。
+进程可以用 `atexit()` 函数登记终止函数（最多32个），这些函数将由 `exit()` 自动调用。
 
+函数声明：
+
+```c++
 int atexit(void (*function)(void));
+```
 
-exit()调用终止函数的顺序与登记时相反。 进程退出前的收尾工作
+exit()调用终止函数的顺序与登记时相反。 
