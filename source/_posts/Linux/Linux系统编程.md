@@ -473,41 +473,57 @@ time_t now;
 time(&now); 
 ```
 
-## struct tm
-
-`time_t` 是一个长整数，需要转换成 `tm` 结构体，`tm` 结构体在中声明，如下：        
-
-```c
-#include <time.h>
-
-struct tm{
-    int tm_year;  // 年份：其值等于实际年份减去1900
-    int tm_mon;  // 月份：取值区间为[0,11]，其中0代表一月，11代表12月
-    int tm_mday; // 日期：一个月中的日期，取值区间为[1,31]
-    int tm_hour;  // 时：取值区间为[0,23]
-    int tm_min;  // 分：取值区间为[0,59]
-    int tm_sec;   // 秒：取值区间为[0,59]
-    int tm_wday; // 星期：取值区间为[0,6]，其中0代表星期天，6代表星期六
-    int tm_yday;  // 从每年的1月1日开始算起的天数：取值区间为[0,365] 
-    int tm_isdst;  // 夏令时标识符，该字段意义不大
-}
-```
-
 ## localtime()
 
-`localtime()` 函数用于把 `time_t` 表示的时间转换为 `tm` 结构体表示的时间。
-
-`localtime()` 函数不是线程安全的，`localtime_r()` 是线程安全的。
+**函数声明：**
 
 ```c
-#include <time.h>
-
-// 函数声明：
+/**
+ * @brief 把time_t表示的时间转换为tm结构体表示的时间，不是线程安全的
+ * @param timep time_t表示的时间
+ * @return tm结构体表示的时间
+ */
 struct tm *localtime(const time_t *timep);
+/**
+ * @brief 把time_t表示的时间转换为tm结构体表示的时间，线程安全
+ * @param timep time_t表示的时间
+ * @param result 保存tm结构体表示的时间
+ * @return tm结构体表示的时间
+ */
 struct tm *localtime_r(const time_t *timep, struct tm *result);
 ```
 
-示例：
+**数据结构：**
+
+`time_t` 是一个长整数，需要转换成 `tm` 结构体。
+
+```c
+/**
+ * @brief 时间结构体
+ * @param tm_year 年份：其值等于实际年份减去1900
+ * @param tm_mon 月份：取值区间为[0,11]，其中0代表一月，11代表12月
+ * @param tm_mday 日期：一个月中的日期，取值区间为[1,31]
+ * @param tm_hour 时：取值区间为[0,23]
+ * @param tm_min 分：取值区间为[0,59]
+ * @param tm_sec 秒：取值区间为[0,59]
+ * @param tm_wday 星期：取值区间为[0,6]，其中0代表星期天，6代表星期六
+ * @param tm_yday 从每年的1月1日开始算起的天数：取值区间为[0,365] 
+ * @param tm_isdst 夏令时标识符，该字段意义不大
+ */
+struct tm{
+    int tm_year; 
+    int tm_mon;
+    int tm_mday; 
+    int tm_hour;  
+    int tm_min;
+    int tm_sec;  
+    int tm_wday; 
+    int tm_yday;  
+    int tm_isdst; 
+}
+```
+
+**示例：**
 
 ```c++
 #include <iostream>
@@ -525,7 +541,7 @@ int main() {
 
 `mktime()` 函数的功能与 `localtime()` 函数相反，用于把 `tm` 结构体时间转换为 `time_t` 时间。
 
-函数声明：
+**函数声明：**
 
 ```c++
 time_t mktime(struct tm *tm);
@@ -545,7 +561,7 @@ time_t mktime(struct tm *tm);
 
 用于获取1970年1月1日到现在的秒和当前秒中已逝去的微秒数，可以用于程序的计时。
 
-函数声明：
+**函数声明：**
 
 ```c++
 int gettimeofday(struct timeval *tv, struct timezone *tz);
@@ -561,7 +577,7 @@ struct timezone {     /* 时区，在实际开发中，派不上用场 */
 };
 ```
 
-示例：
+**示例：**
 
 ```c++
 #include <sys/time.h>
@@ -580,14 +596,14 @@ int main(){
 
 ## sleep()
 
-声明：
+**函数声明：**
 
 ```c++
 unsigned int sleep(unsigned int seconds);
 int usleep(useconds_t usec);
 ```
 
-示例：
+**示例：**
 
 ```c++
 #include <unistd.h>
@@ -602,14 +618,14 @@ int main(){
 
 ## 获取当前工作目录
 
-声明：
+**函数声明：**
 
 ```c++
 char *getcwd(char *buf, size_t size); 
 char *get_current_dir_name(void);
 ```
 
-示例：
+**示例：**
 
 ```c++
 #include <iostream>
@@ -630,7 +646,7 @@ int main() {
 
 ## 切换工作目录
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -641,7 +657,7 @@ int main() {
 int chdir(const char *path);
 ```
 
-示例：
+**示例：**
 
 ```c++
 #include <iostream>
@@ -663,7 +679,7 @@ int main() {
 
 ## 创建目录
 
-函数声明
+**函数声明：**
 
 ```c++
 /**
@@ -677,7 +693,7 @@ int mkdir(const char *pathname, mode_t mode);
 
 ## 删除目录
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -692,7 +708,7 @@ int rmdir(const char *path);
 
 文件存放在目录中，在处理文件之前，必须先知道目录中有哪些文件，所以要获取目录中文件的列表。
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -716,7 +732,8 @@ struct dirent *readdir(DIR *dirp);
 */
 int closedir(DIR *dirp);
 ```
-数据结构
+**数据结构：**
+
 ```c++
 /**
  * @brief 目录指针
@@ -740,7 +757,7 @@ struct dirent {
 };
 ```
 
-示例：
+**示例：**
 
 ```c++
 #include <dirent.h>
@@ -765,7 +782,7 @@ int main(int argc, char* argv[]) {
 ```
 ## access()
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -777,7 +794,7 @@ int main(int argc, char* argv[]) {
 int access(const char *pathname, int mode);
 ```
 
-mode参数取值如下：
+**mode参数取值：**
 
 ```c++
 #define R_OK  4  // 判断是否有读权限。
@@ -790,7 +807,7 @@ mode参数取值如下：
 
 ## stat()
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -802,7 +819,7 @@ mode参数取值如下：
 int stat(const char *path, struct stat *buf);
 ```
 
-数据结构：
+**数据结构：**
 
 ```c++
 /**
@@ -844,7 +861,7 @@ S_ISREG(st_mode)
 S_ISDIR(st_mode)
 ```
 
-示例：
+**示例：**
 
 ```c++
 #include <iostream>
@@ -875,7 +892,7 @@ int main(int argc, char* argv[]) {
 
 ## utime()
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -887,7 +904,7 @@ int main(int argc, char* argv[]) {
 int utime(const char *filename, const struct utimbuf *times);
 ```
 
-数据结构：
+**数据结构：**
 
 ```c++
 /**
@@ -902,7 +919,7 @@ struct utimbuf
 
 ## rename()
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -916,7 +933,7 @@ int rename(const char *oldpath, const char *newpath);
 
 ## remove()
 
-函数声明：
+**函数声明：**
 
 ```c++
 /**
@@ -1127,11 +1144,9 @@ F 信号不能被忽略。
 
 进程对信号的处理方法有三种：
 
-1）对该信号的处理采用系统的默认操作，大部分的信号的默认操作是终止进程。
-
-2）设置信号的处理函数，收到信号后，由该函数来处理。
-
-3）忽略某个信号，对该信号不做任何处理，就像未发生过一样。
+1. 对该信号的处理采用系统的默认操作，大部分的信号的默认操作是终止进程。
+2. 设置信号的处理函数，收到信号后，由该函数来处理。
+3. 忽略某个信号，对该信号不做任何处理，就像未发生过一样。
 
 signal()函数可以设置程序对信号的处理方式。
 
