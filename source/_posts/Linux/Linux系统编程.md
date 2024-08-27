@@ -458,7 +458,7 @@ UNIX操作系统根据计算机产生的年代把1970年1月1日作为UNIX的纪
 
 ## time_t
 
-`time_t` 用于表示时间类型，是 `long` 类型的别名，在 `<time.h>` 文件中定义，表示从1970年1月1日0时0分0秒到现在的秒数。
+`time_t` 用于表示时间类型，是 `long` 类型的别名，表示从1970年1月1日0时0分0秒到现在的秒数。
 
 ## time()
 
@@ -480,7 +480,7 @@ time(&now);
 
 ## struct tm
 
-`time_t` 是一个长整数，需要转换成 `tm` 结构体，tm结构体在中声明，如下：        
+`time_t` 是一个长整数，需要转换成 `tm` 结构体，`tm` 结构体在中声明，如下：        
 
 ```c
 #include <time.h>
@@ -530,101 +530,58 @@ int main() {
 
 `mktime()` 函数的功能与 `localtime()` 函数相反，用于把 `tm` 结构体时间转换为 `time_t` 时间。
 
-包含头文件：<time.h>
-
 函数声明：
 
+```c++
 time_t mktime(struct tm *tm);
+```
 
 该函数主要用于时间的运算，例如：把2022-03-01 00:00:25加30分钟。
 
-思路：1）解析字符串格式的时间，转换成tm结构体；2）用mktime()函数把tm结构体转换成time_t时间；3）把time_t时间加30*60秒；4）用localtime_r()函数把time_t时间转换成tm结构体；5）把tm结构体转换成字符串。
+思路：
 
-## 六、gettimeofday()库函数
+1. 解析字符串格式的时间，转换成tm结构体；
+2. 用mktime()函数把tm结构体转换成time_t时间；
+3. 把time_t时间加30*60秒；
+4. 用localtime_r()函数把time_t时间转换成tm结构体；
+5. 把tm结构体转换成字符串。
+
+## gettimeofday()
 
 用于获取1970年1月1日到现在的秒和当前秒中已逝去的微秒数，可以用于程序的计时。
 
-包含头文件：<sys/time.h>
-
 函数声明：
 
+```c++
 int gettimeofday(struct timeval *tv, struct timezone *tz);
 
- 
-
 struct timeval {
-
- time_t   tv_sec;   /* 1970-1-1到现在的秒数 */
-
- suseconds_t tv_usec;   /* 当前秒中，已逝去的微秒数 */
-
+    time_t      tv_sec;    /* 1970-1-1到现在的秒数 */
+    suseconds_t tv_usec;   /* 当前秒中，已逝去的微秒数 */
 };
 
- 
-
-struct timezone {     /* 在实际开发中，派不上用场 */
-
- int tz_minuteswest;    /* minutes west of Greenwich */ 
-
- int tz_dsttime;      /* type of DST correction */
-
+struct timezone {     /* 时区，在实际开发中，派不上用场 */
+    int tz_minuteswest;    /* minutes west of Greenwich */ 
+    int tz_dsttime;        /* type of DST correction */
 };
+```
 
 示例：
 
-\#include <iostream>
+```c++
+#include <sys/time.h>
+#include <iostream>
 
-\#include <sys/time.h> // gettimeofday()需要的头文件。
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- timeval start,end;
-
- 
-
- gettimeofday(&start, 0 ); // 计时开始。
-
- 
-
- for (int ii=0;ii<1000000000;ii++)
-
-  ;
-
- 
-
- gettimeofday(&end, 0 );  // 计时结束。
-
- 
-
- // 计算消耗的时长。
-
- timeval tv;
-
- tv.tv_usec=end.tv_usec-start.tv_usec;
-
- tv.tv_sec=end.tv_sec-start.tv_sec;
-
- if (tv.tv_usec<0)
-
- {
-
-  tv.tv_usec=1000000-tv.tv_usec;
-
-  tv.tv_sec--;
-
- }
-
- 
-
- cout << "耗时：" << tv.tv_sec << "秒和" << tv.tv_usec << "微秒。\n";
-
+int main(){
+    timeval start, end;
+    gettimeofday(&start, NULL);
+    for(int i = 0; i < 100000000; i++){
+        // do nothing
+    }
+    gettimeofday(&end, NULL);
+    std::cout << "Time elapsed: " << (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec) << " us" << std::endl;
 }
+```
 
 ## sleep()
 
@@ -678,7 +635,7 @@ int main() {
 
 ## 切换工作目录
 
-声明：
+函数声明：
 
 ```c++
 int chdir(const char *path);
@@ -708,88 +665,90 @@ int main() {
 
 ## 创建目录
 
-```
-```
+函数声明
 
-
-
-包含头文件：<sys/stat.h>
-
+```c++
+/**
+ * @brief 创建目录
+ * @param pathname 目录名。
+ * @param mode 访问权限，如0755，不要省略前置的0。
+ * @return 0-成功；其它-失败（上级目录不存在或没有权限）。
+*/
 int mkdir(const char *pathname, mode_t mode);
+```
 
-pathname-目录名。
+## 删除目录
 
-mode-访问权限，如0755，不要省略前置的0。
+函数声明：
 
-返回值：0-成功；其它-失败（上级目录不存在或没有权限）。 /tmp/aaa /tmp/aaa/bbb 
-
-### 4）删除目录
-
-包含头文件： <unistd.h>
-
+```c++
+/**
+ * @brief 删除目录
+ * @param path-目录名。
+ * @return 0-成功；其它-失败（目录不存在或没有权限）。
+*/
 int rmdir(const char *path);
+```
 
-path-目录名。
-
-返回值：0-成功；其它-失败（目录不存在或没有权限）。
-
-## 二、获取目录中文件的列表
+## 获取目录中文件的列表
 
 文件存放在目录中，在处理文件之前，必须先知道目录中有哪些文件，所以要获取目录中文件的列表。
 
-### 1）包含头文件
+函数声明：
 
-\#include <dirent.h>
-
-### 2）相关的库函数
-
-**步骤一：用****opendir()****函数打开目录。**
-
+```c++
+/**
+ * @brief 打开目录
+ * @param pathname-目录名。
+ * @return 成功-返回目录的地址，失败-返回空地址。
+*/
 DIR *opendir(const char *pathname);
 
-成功-返回目录的地址，失败-返回空地址。
-
-**步骤二：用****readdir()****函数循环的读取目录。**
-
+/**
+ * @brief 读取目录
+ * @param dirp-目录指针。
+ * @return 成功-返回struct dirent结构体的地址，失败-返回空地址。
+*/
 struct dirent *readdir(DIR *dirp);
 
-成功-返回struct dirent结构体的地址，失败-返回空地址。
-
-**步骤三：用****closedir()****关闭目录。**
-
+/** 
+ * @brief 关闭目录
+ * @param dirp-目录指针。
+ * @return 0-成功；其它-失败。
+*/
 int closedir(DIR *dirp);
+```
+数据结构
+```c++
+/**
+ * @brief 目录指针
+*/
+DIR *dir;
 
-### 3）数据结构
-
-目录指针：
-
-DIR *目录指针变量名;
-
-每次调用readdir()，函数返回struct dirent的地址，存放了本次读取到的内容。
-
-struct dirent
-
-{
-
-  long d_ino;                 // inode number 索引节点号。
-
-  off_t d_off;                 // offset to this dirent 在目录文件中的偏移。
-
-  unsigned short d_reclen;       // length of this d_name 文件名长度。
-
-  unsigned char d_type;         // the type of d_name 文件类型。
-
-  char d_name [NAME_MAX+1];  // file name文件名，最长255字符。
-
+/**
+ * @brief 目录项
+ * @param d_ino 索引节点号。
+ * @param d_off 在目录文件中的偏移。
+ * @param d_reclen 文件名长度。
+ * @param d_type 文件类型。有多种取值，最重要的是8和4，8-常规文件（A regular file）；4-子目录（A directory）。注意，d_name的数据类型是字符，不可直接显示。
+ * @param d_name 文件名或目录名，最长255字符。
+*/
+struct dirent {
+    long d_ino;                 
+    off_t d_off;                 
+    unsigned short d_reclen;      
+    unsigned char d_type;        
+    char d_name[NAME_MAX+1];
 };
-
-重点关注结构体的d_name和d_type成员。
-
-d_name-文件名或目录名。
-
-d_type-文件的类型，有多种取值，最重要的是8和4，8-常规文件（A regular file）；4-子目录（A directory），其它的暂时不关心。注意，d_name的数据类型是字符，不可直接显示。
+```
 
 示例：
+
+```c++
+```
+
+
+
 
 \#include <iostream>
 
@@ -855,7 +814,7 @@ errno在<errno.h>中声明。
 
 配合 strerror()和perror()两个库函数，可以查看出错的详细信息。
 
-## 一、strerror()库函数
+## strerror()
 
 strerror() 在<string.h>中声明，用于获取错误代码对应的详细信息。
 
@@ -921,19 +880,19 @@ int main()
 
 }
 
-## 二、perror()库函数
+## perror()
 
 perror() 在<stdio.h>中声明，用于在控制台显示最近一次系统错误的详细信息，在实际开发中，服务程序在后台运行，通过控制台显示错误信息意义不大。（对调试程序略有帮助）
 
 void perror(const char *s);
 
-## 三、注意事项
+## 注意事项
 
-### 1）调用库函数失败不一定会设置errno
+- 调用库函数失败不一定会设置errno
 
 并不是全部的库函数在调用失败时都会设置errno的值，以man手册为准（一般来说，不属于系统调用的函数不会设置errno，属于系统调用的函数才会设置errno）。什么是系统调用？百度“库函数和系统调用的区别”。
 
-### 2）errno不能作为调用库函数失败的标志
+- errno不能作为调用库函数失败的标志
 
 errno的值只有在库函数调用发生错误时才会被设置，当库函数调用成功时，errno的值不会被修改，不会主动的置为 0。
 
@@ -1023,7 +982,7 @@ mode     需要判断的存取权限。在头文件<unistd.h>中的预定义如�
 
 在实际开发中，access()函数主要用于判断目录或文件是否存在。
 
-## 二、stat()库函数
+## stat()库函数
 
 ### 1）stat结构体
 
@@ -1398,7 +1357,7 @@ sig：准备发送的信号代码，假如其值为0则没有任何信号送出�
 
 8）最后一个线程对取消请求做出响应。
 
-## 一、进程终止的状态
+### 一、进程终止的状态
 
 在main()函数中，return的返回值即终止状态，如果没有return语句或调用exit()，那么该进程的终止状态是0。
 
@@ -1416,7 +1375,7 @@ status也是进程终止的状态。
 
 如果进程被异常终止，终止状态为非0。  服务程序的调度、日志和监控
 
-## 二、资源释放的问题
+### 二、资源释放的问题
 
 retun表示函数返回，会调用局部对象的析构函数，main()函数中的return还会调用全局对象的析构函数。
 
@@ -1424,7 +1383,7 @@ retun表示函数返回，会调用局部对象的析构函数，main()函数中
 
 exit()会执行清理工作，然后退出，_exit()和_Exit()直接退出，不会执行任何清理工作。
 
-## 三、进程的终止函数
+### 三、进程的终止函数
 
 进程可以用atexit()函数登记终止函数（最多32个），这些函数将由exit()自动调用。
 
