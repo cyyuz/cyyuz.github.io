@@ -741,6 +741,192 @@ int main(int argc, char* argv[]) {
     closedir(dir); 
 }
 ```
+## access()
+
+函数声明：
+
+```c++
+/**
+ * @brief 检查当前用户是否可以访问文件
+ * @param pathname-目录或文件名。
+ * @param mode-需要判断的存取权限。
+ * @return 0-成功；-1-失败，errno被设置。
+*/
+int access(const char *pathname, int mode);
+```
+
+mode参数取值如下：
+
+```c++
+#define R_OK  4  // 判断是否有读权限。
+#define W_OK  2  // 判断是否有写权限。
+#define X_OK  1  // 判断是否有执行权限。
+#define F_OK  0  // 判断是否存在。
+```
+
+在实际开发中，access()函数主要用于判断目录或文件是否存在。
+
+## stat()
+
+数据结构：
+
+```c++
+/**
+ * @brief 存放目录或文件的详细信息。
+*/
+struct stat{
+    dev_t st_dev;    // 文件的设备编号。
+    ino_t st_ino;     // 文件的i-node。
+    mode_t st_mode; // 文件的类型和存取的权限。
+    nlink_t st_nlink;  // 连到该文件的硬连接数目，刚建立的文件值为1。
+    uid_t st_uid;     // 文件所有者的用户识别码。
+    gid_t st_gid;     // 文件所有者的组识别码。
+    dev_t st_rdev;    // 若此文件为设备文件，则为其设备编号。
+    off_t st_size;     // 文件的大小，以字节计算。
+    size_t st_blksize;  // I/O 文件系统的I/O 缓冲区大小。
+    size_t st_blocks;  // 占用文件区块的个数。
+    time_t st_atime;  // 文件最近一次被存取或被执行的时间，在用mknod、 utime、read、write 与tructate 时改变。
+    time_t st_mtime;  // 文件最后一次被修改的时间，在用mknod、 utime 和write 时才会改变。
+    time_t st_ctime;  // 最近一次被更改的时间，在文件所有者、组、 权限被更改时更新。
+};
+```
+
+重点关注 `st_mode`、`st_size` 和 `st_mtime` 成员。注意：`st_mtime` 是一个整数表示的时间，需要自己写代码转换格式。
+
+`st_mode` 成员的取值很多，用以下两个宏来判断：
+
+```c++
+/**
+ * @brief 判断文件类型
+ * @param st_mode-文件类型和权限。
+ * @return 如果是普通文件，返回真。
+*/
+S_ISREG(st_mode)
+/**
+ * @brief 判断是否为目录
+ * @param st_mode-文件类型和权限。
+ * @return 如果是目录，返回真。
+*/
+S_ISDIR(st_mode)
+```
+
+函数声明：
+
+```c++
+/**
+ * @brief 获取目录或文件的详细信息
+ * @param path-目录或文件名。
+ * @param buf-存放目录或文件的详细信息。
+ * @return 0-成功，-1-失败，errno被设置。
+*/
+int stat(const char *path, struct stat *buf);
+```
+
+示例：
+
+```c++
+\#include <stdio.h>
+
+\#include <iostream>
+
+\#include <cstdio>
+
+\#include <sys/stat.h>
+
+\#include <unistd.h>
+
+using namespace std;
+
+ 
+
+int main(int argc,char *argv[])
+
+{
+
+ if (argc != 2) { cout << "Using:./demo 文件或目录名\n"; return -1; }
+
+ 
+
+ struct stat st; // 存放目录或文件详细信息的结构体。
+
+ 
+
+ // 获取目录或文件的详细信息
+
+ if (stat(argv[1],&st) != 0)
+
+ {
+
+  cout << "stat(" << argv[1] << "):" << strerror(errno) << endl; return -1;
+
+ }
+
+ 
+
+ if (S_ISREG(st.st_mode))
+
+  cout << argv[1] << "是一个文件(" << "mtime=" << st.st_mtime << ",size=" << st.st_size << ")\n";
+
+ if (S_ISDIR(st.st_mode))
+
+cout << argv[1] << "是一个目录(" << "mtime=" << st.st_mtime << ",size=" << st.st_size << ")\n";
+
+}
+```
+
+## utime()
+
+函数声明：
+
+```c++
+/**
+ * @brief 修改文件最后访问和修改时间（st_atime和st_mtime）
+ * @param filename 文件名
+ * @param times 修改的时间，如果为空，则设置为当前时间
+ * @return 0-成功，-1-失败，errno被设置
+ */
+int utime(const char *filename, const struct utimbuf *times);
+```
+
+数据结构：
+
+```c++
+/**
+ * @brief 修改文件最后访问和修改时间（st_atime和st_mtime）
+ */
+struct utimbuf
+{
+    time_t actime;
+    time_t modtime;
+};
+```
+
+## rename()
+
+函数声明：
+
+```c++
+/**
+ * @brief 重命名目录或文件
+ * @param oldpath 原目录或文件名
+ * @param newpath 目标目录或文件名
+ * @return 0-成功，-1-失败，errno被设置
+ */
+int rename(const char *oldpath, const char *newpath);
+```
+
+## remove()
+
+函数声明：
+
+```c++
+/**
+ * @brief 删除文件或目录
+ * @param pathname 待删除的文件或目录名
+ * @return 0-成功，-1-失败，errno被设置
+ */
+int remove(const char *pathname);
+```
 
 # Linux系统错误
 
@@ -885,220 +1071,6 @@ int main()
  }
 
 }
-
-# 目录文件更多操作
-
-## access()库函数
-
-access()函数用于判断当前用户对目录或文件的存取权限。
-
-包含头文件：
-
-\#include <unistd.h>
-
-函数声明：
-
-int access(const char *pathname, int mode);
-
-参数说明：
-
-pathname 目录或文件名。
-
-mode     需要判断的存取权限。在头文件<unistd.h>中的预定义如下：
-
-\#define R_OK  4  // 判断是否有读权限。
-
-\#define W_OK 2  // 判断是否有写权限。
-
-\#define X_OK  1  // 判断是否有执行权限。
-
-\#define F_OK  0  // 判断是否存在。
-
-返回值：
-
-当pathname满足mode权限返回0，不满足返回-1，errno被设置。
-
-在实际开发中，access()函数主要用于判断目录或文件是否存在。
-
-## stat()库函数
-
-### 1）stat结构体
-
-struct stat结构体用于存放目录或文件的详细信息，如下：
-
-struct stat
-
-{
-
- dev_t st_dev;    // 文件的设备编号。
-
- ino_t st_ino;     // 文件的i-node。
-
- mode_t st_mode; // 文件的类型和存取的权限。
-
- nlink_t st_nlink;  // 连到该文件的硬连接数目，刚建立的文件值为1。
-
- uid_t st_uid;     // 文件所有者的用户识别码。
-
- gid_t st_gid;     // 文件所有者的组识别码。
-
- dev_t st_rdev;    // 若此文件为设备文件，则为其设备编号。
-
- off_t st_size;     // 文件的大小，以字节计算。
-
- size_t st_blksize;  // I/O 文件系统的I/O 缓冲区大小。
-
- size_t st_blocks;  // 占用文件区块的个数。
-
- time_t st_atime;  // 文件最近一次被存取或被执行的时间，
-
-​               // 在用mknod、 utime、read、write 与tructate 时改变。
-
- time_t st_mtime;  // 文件最后一次被修改的时间，
-
-​               // 在用mknod、 utime 和write 时才会改变。
-
- time_t st_ctime;  // 最近一次被更改的时间，在文件所有者、组、 权限被更改时更新。
-
-};
-
-struct stat结构体的成员变量比较多，重点关注st_mode、st_size和st_mtime成员。注意：st_mtime是一个整数表示的时间，需要程序员自己写代码转换格式。
-
-st_mode成员的取值很多，用以下两个宏来判断：
-
-S_ISREG(st_mode) // 是否为普通文件，如果是，返回真。 
-
-S_ISDIR(st_mode) // 是否为目录，如果是，返回真。
-
-### 2）stat()库函数
-
-包含头文件：
-
-\#include <sys/stat.h>
-
-函数声明：
-
-int stat(const char *path, struct stat *buf);
-
-stat()函数获取path参数指定目录或文件的详细信息，保存到buf结构体中。
-
-返回值：0-成功，-1-失败，errno被设置。
-
-示例：
-
-\#include <stdio.h>
-
-\#include <iostream>
-
-\#include <cstdio>
-
-\#include <sys/stat.h>
-
-\#include <unistd.h>
-
-using namespace std;
-
- 
-
-int main(int argc,char *argv[])
-
-{
-
- if (argc != 2) { cout << "Using:./demo 文件或目录名\n"; return -1; }
-
- 
-
- struct stat st; // 存放目录或文件详细信息的结构体。
-
- 
-
- // 获取目录或文件的详细信息
-
- if (stat(argv[1],&st) != 0)
-
- {
-
-  cout << "stat(" << argv[1] << "):" << strerror(errno) << endl; return -1;
-
- }
-
- 
-
- if (S_ISREG(st.st_mode))
-
-  cout << argv[1] << "是一个文件(" << "mtime=" << st.st_mtime << ",size=" << st.st_size << ")\n";
-
- if (S_ISDIR(st.st_mode))
-
-cout << argv[1] << "是一个目录(" << "mtime=" << st.st_mtime << ",size=" << st.st_size << ")\n";
-
-}
-
-## 三、utime()库函数
-
-utime()函数用于修改目录或文件的时间。
-
-包含头文件：
-
-\#include <sys/types.h>
-
-\#include <utime.h>
-
-函数声明：
-
-int utime(const char *filename, const struct utimbuf *times);
-
-utime()函数用来修改参数filename的st_atime和st_mtime。如果参数times为空地址，则设置为当前时间。结构utimbuf 声明如下：
-
-struct utimbuf
-
-{
-
- time_t actime;
-
- time_t modtime;
-
-};
-
-返回值：0-成功，-1-失败，errno被设置。
-
-## 四、rename()库函数
-
-rename()函数用于重命名目录或文件，相当于操作系统的mv命令。
-
-包含头文件：
-
-\#include <stdio.h>
-
-函数声明：
-
-int rename(const char *oldpath, const char *newpath);
-
-参数说明：
-
-oldpath   原目录或文件名。
-
-newpath  目标目录或文件名。
-
-返回值：0-成功，-1-失败，errno被设置。
-
-## 五、remove()库函数
-
-remove()函数用于删除目录或文件，相当于操作系统的rm命令。
-
-包含头文件：
-
-\#include <stdio.h>
-
-函数声明：
-
-int remove(const char *pathname);
-
-参数说明：
-
-pathname 待删除的目录或文件名。
-
-返回值：0-成功，-1-失败，errno被设置。
 
 # Linux信号
 
