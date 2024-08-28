@@ -946,147 +946,73 @@ int remove(const char *pathname);
 
 # Linux系统错误
 
-在C++程序中，如果调用了库函数，可以通过函数的返回值判断调用是否成功。其实，还有一个整型的全局变量errno，存放了函数调用过程中产生的错误代码。
-
-如果调用库函数失败，可以通过errno的值来查找原因，这也是调试程序的一个重要方法。
-
-errno在<errno.h>中声明。
-
-配合 strerror()和perror()两个库函数，可以查看出错的详细信息。
+整型的全局变量 `errno`，存放了函数调用过程中产生的错误代码。如果调用库函数失败，可以通过errno的值来查找原因，这也是调试程序的一个重要方法。
 
 ## strerror()
 
-strerror() 在<string.h>中声明，用于获取错误代码对应的详细信息。
+**函数声明：**
 
-char *strerror(int errnum);               // 非线程安全。
+```c++
+/**
+ * @brief 获取错误代码对应的详细信息
+ * @param errnum 错误代码
+ * @return 错误信息字符串
+ * @note 非线程安全。
+*/
+char *strerror(int errnum); 
 
-int strerror_r(int errnum, char *buf, size_t buflen);    // 线程安全。
+/**
+ * @brief 获取错误代码对应的详细信息
+ * @param errnum 错误代码
+ * @param buf 存放错误信息的缓冲区
+ * @param buflen 缓冲区大小
+ * @return 错误信息字符串
+ * @note 线程安全。
+*/
+int strerror_r(int errnum, char *buf, size_t buflen); 
 
-gcc8.3.1一共有133个错误代码。
+/**
+ * @note gcc8.3.1一共有133个错误代码。
+*/
+```
 
-示例一：
+**示例：**
 
-\#include <iostream>
+```c++
+#include <iostream>
+#include <string.h>
+#include <sys/stat.h>
 
-\#include <cstring>
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- int ii;
-
- 
-
- for(ii=0;ii<150;ii++)    // gcc8.3.1一共有133个错误代码。
-
- {
-
-  cout << ii << ":" << strerror(ii) << endl;
-
- }
-
+int main(int argc, char* argv[]) {
+    for (int i = 0; i < 150; i++) {
+        std::cout << strerror(i) << std::endl;
+    }
+    int iret = mkdir("/home/cyyu/a/b/c", 0777);
+    std::cout << "iret=" << iret << std::endl;
+    std::cout << "errno=" << errno << std::endl;
+    std::cout << strerror(errno) << std::endl;
 }
-
-示例二：
-
-\#include <iostream>
-
-\#include <cstring>
-
-\#include <cerrno>
-
-\#include <sys/stat.h>
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- int iret=mkdir("/tmp/aaa",0755);
-
- 
-
- cout << "iret=" << iret << endl;
-
- cout << errno << ":" << strerror(errno) << endl;
-
-}
+```
 
 ## perror()
 
-perror() 在<stdio.h>中声明，用于在控制台显示最近一次系统错误的详细信息，在实际开发中，服务程序在后台运行，通过控制台显示错误信息意义不大。（对调试程序略有帮助）
+用于在控制台显示最近一次系统错误的详细信息，在实际开发中，服务程序在后台运行，通过控制台显示错误信息意义不大。（对调试程序略有帮助）
 
+```c++
 void perror(const char *s);
+```
 
 ## 注意事项
 
 - 调用库函数失败不一定会设置errno
 
-并不是全部的库函数在调用失败时都会设置errno的值，以man手册为准（一般来说，不属于系统调用的函数不会设置errno，属于系统调用的函数才会设置errno）。什么是系统调用？百度“库函数和系统调用的区别”。
+并不是全部的库函数在调用失败时都会设置errno的值，以man手册为准（一般来说，不属于系统调用的函数不会设置errno，属于系统调用的函数才会设置errno）。
 
 - errno不能作为调用库函数失败的标志
 
 errno的值只有在库函数调用发生错误时才会被设置，当库函数调用成功时，errno的值不会被修改，不会主动的置为 0。
 
 在实际开发中，判断函数执行是否成功还得靠函数的返回值，只有在返回值是失败的情况下，才需要关注errno的值。
-
-示例：
-
-\#include <iostream>
-
-\#include <cstring>  // strerror()函数需要的头文件。
-
-\#include <cerrno>   // errno全局变量的头文件。
-
-\#include <sys/stat.h> // mkdir()函数需要的头文件。
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- int iret=mkdir("/tmp/aaa/bb/cc/dd",0755);
-
- if (iret!=0)
-
- {
-
-  cout << "iret=" << iret << endl;
-
-  cout << errno << ":" << strerror(errno) << endl;
-
-  perror("调用mkdir(/tmp/aaa/bb/cc/dd)失败");
-
- }
-
- 
-
- iret=mkdir("/tmp/dd",0755);
-
- if (ireet!=0)
-
- {
-
-  cout << "iret=" << iret << endl;
-
-  cout << errno << ":" << strerror(errno) << endl;
-
-  perror("调用mkdir(/tmp/dd)失败");
-
- }
-
-}
 
 # Linux信号
 
@@ -1220,7 +1146,7 @@ int kill(pid_t pid, int sig);
 
 8）最后一个线程对取消请求做出响应。
 
-- **进程终止的状态**
+### 进程终止的状态
 
 在 `main()` 函数中，`return` 的返回值即终止状态，如果没有 `return` 语句或调用 `exit()` ，那么该进程的终止状态是 `0` 。
 
@@ -1238,7 +1164,7 @@ status也是进程终止的状态。
 
 如果进程被异常终止，终止状态为非0。
 
-- **资源释放的问题**
+### 资源释放的问题
 
 `retun` 表示函数返回，会调用局部对象的析构函数，`main()` 函数中的 `return` 还会调用全局对象的析构函数。
 
@@ -1246,11 +1172,11 @@ status也是进程终止的状态。
 
 `exit()` 会执行清理工作，然后退出，`_exit()` 和 `_Exit()` 直接退出，不会执行任何清理工作。
 
-- **进程的终止函数**
+### atexit()
 
 进程可以用 `atexit()` 函数登记终止函数（最多32个），这些函数将由 `exit()` 自动调用。
 
-函数声明：
+**函数声明：**
 
 ```c++
 int atexit(void (*function)(void));
