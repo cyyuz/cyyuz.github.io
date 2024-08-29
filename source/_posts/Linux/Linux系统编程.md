@@ -939,3 +939,285 @@ int atexit(void (*function)(void));
 ```
 
 exit()调用终止函数的顺序与登记时相反。 
+
+## 调用可执行程序
+
+Linux提供了 `system()` 函数和 `exec` 函数族，在C++程序中，可以执行其它的程序（二进制文件、操作系统命令或Shell脚本）。
+
+### system()
+
+把需要执行的程序和参数用一个字符串传给system()函数。
+
+**函数声明：**
+
+```c++
+/**
+ * @brief 执行shell命令
+ * @param string shell命令
+ * @return 0-成功，非0-程序不存在或程序执行失败
+ */
+int system(const char * string);
+```
+
+**示例：**
+
+```c++
+#include <stdlib.h>
+#include <iostream>
+int main(int argc, char* argv[]) {
+    if (system("ls -l /home/cyyu") != 0) {
+        std::cout << "Error: system call failed" << std::endl;
+    }
+}
+```
+
+### exec函数族
+
+**函数声明：**
+
+```c++
+/**
+ * @brief 替换当前进程映像
+ * @param path 可执行程序路径
+ * @param arg 可执行程序参数
+ * @return 成功不返回，失败返回-1，失败原因存于errno中
+ * @note 参数arg的最后一个元素必须是NULL。
+ */
+int execl(const char *path, const char *arg, ...);
+/**
+ * @brief 替换当前进程映像
+ * @param path 可执行程序路径
+ * @param argv 可执行程序参数
+ * @return 成功不返回，失败返回-1，失败原因存于errno中
+ * @note 参数argv的最后一个元素必须是NULL。
+ */
+int execv(const char *path, char *const argv[]);
+
+/**
+ * @note 新进程的进程编号与原进程相同，但是，新进程取代了原进程的代码段、数据段和堆栈。
+ * @note 当在主程序中成功调用exec后，被调用的程序将取代调用者程序，也就是说，exec函数之后的代码都不会被执行。
+ */
+```
+
+**示例：**
+
+```c++
+#include <iostream>
+#include <unistd.h>
+int main(int argc, char* argv[]) {
+#if 1
+    if (execl("/bin/ls", "ls", "-l", NULL) == -1) {
+        perror("execl");
+    }
+#else
+    char* args[5];
+    args[0] = (char*)"ls";
+    args[1] = (char*)"-l";
+    args[2] = NULL;
+    if (execv("/bin/ls", args) == -1) {
+        perror("execl");
+    }
+#endif
+}
+```
+
+## 创建进程
+
+### Linux的0、1和2号进程
+
+整个linux系统全部的进程是一个树形结构。
+
+0号进程（系统进程）是所有进程的祖先，它创建了1号和2号进程。
+
+1号进程（systemd）负责执行内核的初始化工作和进行系统配置。
+
+2号进程（kthreadd）负责所有内核线程的调度和管理。
+
+用pstree命令可以查看进程树（yum -y install psmisc）。
+
+pstree -p 进程编号
+
+### 进程标识
+
+每个进程都有一个非负整数表示的唯一的进程ID。虽然是唯一的，但是进程ID可以复用。当一个进程终止后，其进程ID就成了复用的候选者。Linux采用延迟复用算法，让新建进程的ID不同于最近终止的进程所使用的ID。这样防止了新进程被误认为是使用了同一ID的某个已终止的进程。
+
+pid_t getpid(void);   // 获取当前进程的ID。
+
+pid_t getppid(void);  // 获取父进程的ID。
+
+### fork()函数
+
+一个现有的进程可以调用fork()函数创建一个新的进程。
+
+pid_t fork(void);
+
+由fork()创建的新进程被称为子进程。子进是父进程的副本，父进程和子进程都从调用fork()之后的代码开始执行。
+
+fork()函数被调用一次，但返回两次。两次返回的区别是子进程的返回值是0，而父进程的返回值则是子进程的进程ID。
+
+子进程获得了父进程数据空间、堆和栈的副本（**注意：子进程拥有的是副本，不是和父进程共享**）。
+
+fork()之后，父进程和子进程的执行顺序是不确定的。
+
+\#include <iostream>
+
+\#include <unistd.h>
+
+using namespace std;
+
+ 
+
+int main()
+
+{
+
+ int bh=8;
+
+ string message="我是一只傻傻鸟。";
+
+ 
+
+ pid_t pid=fork();
+
+ 
+
+ if (pid>0)
+
+ { // 父进程将执行这段代码。
+
+  sleep(1);
+
+  cout << "父：pid=" << pid << endl;
+
+  cout << "父：亲爱的" << bh << "号：" << message << endl;
+
+ }
+
+ else
+
+ { // 子进程将执行这段代码。
+
+  bh=3; message="你是一只傻傻鸟。";
+
+  cout << "子：pid=" << pid << endl;
+
+  cout << "子：亲爱的" << bh << "号：" << message << endl;
+
+ }
+
+### fork()的两种用法
+
+1）父进程复制自己，然后，父进程和子进程分别执行不同的代码。这种用法在网络服务程序中很常见，父进程等待客户端的连接请求，当请求到达时，父进程调用fork()，让子进程处理些请求，而父进程则继续等待下一个连接请求。
+
+2）进程要执行另一个程序。这种用法在Shell中很常见，子进程从fork()返回后立即调用exec。
+
+示例：
+
+\#include <iostream>
+
+\#include <unistd.h>
+
+using namespace std;
+
+ 
+
+int main()
+
+{
+
+ if (fork()>0)
+
+ { // 父进程将执行这段代码。
+
+  while (true)
+
+  {
+
+   sleep(1);
+
+   cout << "父进程运行中...\n";
+
+  }
+
+ }
+
+ else
+
+ { // 子进程将执行这段代码。
+
+  sleep(10);
+
+  cout << "子进程开始执行任务...\n";
+
+  execl("/bin/ls","/bin/ls","-lt","/tmp",0);
+
+  cout << "子进程执行任务结束，退出。\n";
+
+ }
+
+}
+
+### 共享文件
+
+fork()的一个特性是在父进程中打开的文件描述符都会被复制到子进程中，父进程和子进程共享同一个文件偏移量。
+
+如果父进程和子进程写同一描述符指向的文件，但又没有任何形式的同步，那么它们的输出可能会相互混合。
+
+示例：
+
+\#include <iostream>
+
+\#include <fstream>
+
+\#include <unistd.h>
+
+using namespace std;
+
+ 
+
+int main()
+
+{
+
+ ofstream fout;
+
+ fout.open("/tmp/tmp.txt"); // 打开文件。
+
+ fork();
+
+ for (int ii=0;ii<10000000;ii++) // 向文件中写入一千万行数据。
+
+ {
+
+  fout << "进程" << getpid() << "西施" << ii << "极漂亮" << "\n";  // 写入的
+
+内容无所谓。
+
+ }
+
+ 
+
+ fout.close();  // 关闭文件。
+
+}
+
+### vfork()函数
+
+vfork()函数的调用和返回值与fork()相同，但两者的语义不同。
+
+vfork()函数用于创建一个新进程，而该新进程的目的是exec一个新程序，它不复制父进程的地址空间，因为子进程会立即调用exec，于是也就不会使用父进程的地址空间。如果子进程使用了父进程的地址空间，可能会带来未知的结果。
+
+vfork()和fork()的另一个区别是：vfork()保证子进程先运行，在子进程调用exec或exit()之后父进程才恢复运行。
+
+## 僵尸进程
+
+## 多进程与信号
+
+## 共享内存
+
+## 循环队列
+
+
+
+
+
