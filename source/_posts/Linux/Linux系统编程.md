@@ -1023,7 +1023,22 @@ int main(int argc, char* argv[]) {
 
 ## 创建进程
 
-### Linux的0、1和2号进程
+### 进程标识
+
+每个进程都有一个非负整数表示的唯一的进程ID。虽然是唯一的，但是进程ID可以复用。当一个进程终止后，其进程ID就成了复用的候选者。Linux采用延迟复用算法，让新建进程的ID不同于最近终止的进程所使用的ID。这样防止了新进程被误认为是使用了同一ID的某个已终止的进程。
+
+```c++
+/**
+ * @brief 获取当前进程的ID
+ * @return 当前进程的ID
+ */
+pid_t getpid(void); 
+/**
+ * @brief 获取父进程的ID
+ * @return 父进程的ID
+ */
+pid_t getppid(void);  // 获取父进程的ID。
+```
 
 整个linux系统全部的进程是一个树形结构。
 
@@ -1035,23 +1050,21 @@ int main(int argc, char* argv[]) {
 
 用pstree命令可以查看进程树（yum -y install psmisc）。
 
+```sh
 pstree -p 进程编号
+```
 
-### 进程标识
+### fork()
 
-每个进程都有一个非负整数表示的唯一的进程ID。虽然是唯一的，但是进程ID可以复用。当一个进程终止后，其进程ID就成了复用的候选者。Linux采用延迟复用算法，让新建进程的ID不同于最近终止的进程所使用的ID。这样防止了新进程被误认为是使用了同一ID的某个已终止的进程。
-
-pid_t getpid(void);   // 获取当前进程的ID。
-
-pid_t getppid(void);  // 获取父进程的ID。
-
-### fork()函数
-
-一个现有的进程可以调用fork()函数创建一个新的进程。
-
+```c++
+/**
+ * @brief 创建子进程
+ * @return 成功返回子进程的进程ID，失败返回-1，失败原因存于errno中
+ */
 pid_t fork(void);
+```
 
-由fork()创建的新进程被称为子进程。子进是父进程的副本，父进程和子进程都从调用fork()之后的代码开始执行。
+由 `fork()` 创建的新进程被称为子进程。子进是父进程的副本，父进程和子进程都从调用 `fork()` 之后的代码开始执行。
 
 fork()函数被调用一次，但返回两次。两次返回的区别是子进程的返回值是0，而父进程的返回值则是子进程的进程ID。
 
@@ -1059,9 +1072,11 @@ fork()函数被调用一次，但返回两次。两次返回的区别是子进�
 
 fork()之后，父进程和子进程的执行顺序是不确定的。
 
-\#include <iostream>
+```c++
 
-\#include <unistd.h>
+#include <iostream>
+
+#include <unistd.h>
 
 using namespace std;
 
@@ -1104,6 +1119,8 @@ int main()
   cout << "子：亲爱的" << bh << "号：" << message << endl;
 
  }
+
+```
 
 ### fork()的两种用法
 
@@ -1216,8 +1233,5 @@ vfork()和fork()的另一个区别是：vfork()保证子进程先运行，在子
 ## 共享内存
 
 ## 循环队列
-
-
-
 
 
