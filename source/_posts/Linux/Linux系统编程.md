@@ -1100,103 +1100,47 @@ int main() {
 
 2. 进程要执行另一个程序。这种用法在Shell中很常见，子进程从 `fork()` 返回后立即调用 `exec` 。
 
-示例：
-
-\#include <iostream>
-
-\#include <unistd.h>
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- if (fork()>0)
-
- { // 父进程将执行这段代码。
-
-  while (true)
-
-  {
-
-   sleep(1);
-
-   cout << "父进程运行中...\n";
-
-  }
-
- }
-
- else
-
- { // 子进程将执行这段代码。
-
-  sleep(10);
-
-  cout << "子进程开始执行任务...\n";
-
-  execl("/bin/ls","/bin/ls","-lt","/tmp",0);
-
-  cout << "子进程执行任务结束，退出。\n";
-
- }
-
-}
-
 ### 共享文件
 
-fork()的一个特性是在父进程中打开的文件描述符都会被复制到子进程中，父进程和子进程共享同一个文件偏移量。
+`fork()` 的一个特性是在父进程中打开的文件描述符都会被复制到子进程中，父进程和子进程共享同一个文件偏移量。
 
 如果父进程和子进程写同一描述符指向的文件，但又没有任何形式的同步，那么它们的输出可能会相互混合。
 
-示例：
+**示例：**
 
-\#include <iostream>
+```c++
+#include <fstream>
+#include <iostream>
+#include <unistd.h>
 
-\#include <fstream>
+int main() {
+    std::ofstream fout;
+    fout.open("/tmp/tmp.txt");
+    fork();
+    for (int i = 0; i < 10000; i++)  
+    {
+        fout << "进程" << getpid() << "==" << i << "\n";
+    }
 
-\#include <unistd.h>
-
-using namespace std;
-
- 
-
-int main()
-
-{
-
- ofstream fout;
-
- fout.open("/tmp/tmp.txt"); // 打开文件。
-
- fork();
-
- for (int ii=0;ii<10000000;ii++) // 向文件中写入一千万行数据。
-
- {
-
-  fout << "进程" << getpid() << "西施" << ii << "极漂亮" << "\n";  // 写入的
-
-内容无所谓。
-
- }
-
- 
-
- fout.close();  // 关闭文件。
-
+    fout.close();
 }
+```
 
 ### vfork()
 
-vfork()函数的调用和返回值与fork()相同，但两者的语义不同。
+```c++
+/**
+ * @brief 创建子进程
+ * @return 成功返回子进程的进程ID，失败返回-1，失败原因存于errno中
+ */
+pid_t vfork(void);
+```
 
-vfork()函数用于创建一个新进程，而该新进程的目的是exec一个新程序，它不复制父进程的地址空间，因为子进程会立即调用exec，于是也就不会使用父进程的地址空间。如果子进程使用了父进程的地址空间，可能会带来未知的结果。
+`vfork()` 函数的调用和返回值与fork()相同，但两者的语义不同。
 
-vfork()和fork()的另一个区别是：vfork()保证子进程先运行，在子进程调用exec或exit()之后父进程才恢复运行。
+`vfork()` 函数用于创建一个新进程，而该新进程的目的是 `exec` 一个新程序，它不复制父进程的地址空间，因为子进程会立即调用exec，于是也就不会使用父进程的地址空间。如果子进程使用了父进程的地址空间，可能会带来未知的结果。
+
+`vfork()` 和 `fork()` 的另一个区别是：`vfork()` 保证子进程先运行，在子进程调用 `exec` 或 `exit()` 之后父进程才恢复运行。
 
 ## 僵尸进程
 
@@ -1215,6 +1159,11 @@ vfork()和fork()的另一个区别是：vfork()保证子进程先运行，在子
 2）父进程通过wait()/waitpid()等函数等待子进程结束，在子进程退出之前，父进程将被阻塞待。
 
 ```c++
+/**
+ * @brief 等待子进程终止
+ * @param stat_loc 子进程终止的信息。（1）如果正常终止，宏WIFEXITED(stat_loc)返回真，宏WEXITSTATUS(stat_loc)可获取终止状态；（2）如果异常终止，宏WTERMSIG(stat_loc)可获取终止进程的信号。
+ * @return 返回子进程的进程编号，如果调用失败返回-1，失败原因存于errno中
+ */
 pid_t wait(int *stat_loc);
 pid_t waitpid(pid_t pid, int *stat_loc, int options);
 pid_t wait3(int *status, int options, struct rusage *rusage);
@@ -1223,135 +1172,71 @@ pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
 
 返回值是子进程的编号。
 
-stat_loc是子进程终止的信息：a）如果是正常终止，宏WIFEXITED(stat_loc)返回真，宏WEXITSTATUS(stat_loc)可获取终止状态；b）如果是异常终止，宏WTERMSIG(stat_loc)可获取终止进程的信号。
+如果父进程很忙，可以捕获 `SIGCHLD` 信号，在信号处理函数中调用 `wait()` / `waitpid()`。
 
-3）如果父进程很忙，可以捕获SIGCHLD信号，在信号处理函数中调用wait()/waitpid()。
+**示例1：**
 
-示例一：
+```c++
+#include <iostream>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+    if (fork() > 0) {
+        int   sts;
+        pid_t pid = wait(&sts);
+        std::cout << "已终止的子进程编号是：" << pid << std::endl;
+        if (WIFEXITED(sts)) {
+            std::cout << "子进程是正常退出的，退出状态是：" << WEXITSTATUS(sts) << std::endl;
+        }
+        else {
+            std::cout << "子进程是异常退出的，终止它的信号是：" << WTERMSIG(sts) << std::endl;
+        }
+    }
+    else { 
+        int* p = 0;
+        *p = 10;
+        exit(1);
+    }
+}
+```
 
-\#include <iostream>
+**示例2：**
 
-\#include <unistd.h>
+```c++
+#include <iostream>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
-\#include <sys/types.h>
-
-\#include <sys/wait.h>
-
-using namespace std;
-
- 
-
-int main()
-
+void func(int sig)
 {
-
- if (fork()>0)
-
- { // 父进程的流程。
-
-  int sts;
-
-  pid_t pid=wait(&sts);
-
- 
-
-  cout << "已终止的子进程编号是：" << pid << endl;
-
- 
-
-  if (WIFEXITED(sts)) { cout << "子进程是正常退出的，退出状态是：" << WEXITSTATUS(sts) << endl; }
-
-  else { cout << "子进程是异常退出的，终止它的信号是：" << WTERMSIG(sts) << endl; }
-
- }
-
- else
-
- { // 子进程的流程。
-
-  //sleep(100);
-
-  int *p=0; *p=10;
-
-  exit(1);
-
- }
-
+    int   sts;
+    pid_t pid = wait(&sts);
+    std::cout << "已终止的子进程编号是：" << pid << std::endl;
+    if (WIFEXITED(sts)) {
+        std::cout << "子进程是正常退出的，退出状态是：" << WEXITSTATUS(sts) << std::endl;
+    }
+    else {
+        std::cout << "子进程是异常退出的，终止它的信号是：" << WTERMSIG(sts) << std::endl;
+    }
 }
 
-示例二：
-
-\#include <iostream>
-
-\#include <unistd.h>
-
-\#include <sys/types.h>
-
-\#include <sys/wait.h>
-
-using namespace std;
-
- 
-
-void func(int sig)  // 子进程退出的信号处理函数。
-
-{
-
- int sts;
-
- pid_t pid=wait(&sts);
-
- 
-
- cout << "已终止的子进程编号是：" << pid << endl;
-
- 
-
- if (WIFEXITED(sts)) { cout << "子进程是正常退出的，退出状态是：" << WEXITSTATUS(sts) << endl; }
-
- else { cout << "子进程是异常退出的，终止它的信号是：" << WTERMSIG(sts) << endl; }
-
+int main() {
+    signal(SIGCHLD, func);
+    if (fork() > 0) {
+        while (true) {
+            std::cout << "父进程忙着执行任务。\n";
+            sleep(1);
+        }
+    }
+    else {
+        // sleep(5);
+        int *p=0; *p=10;
+        exit(1);
+    }
 }
-
- 
-
-int main()
-
-{
-
- signal(SIGCHLD,func); // 捕获子进程退出的信号。
-
- 
-
- if (fork()>0)
-
- { // 父进程的流程。
-
-  while (true)
-
-  {
-
-   cout << "父进程忙着执行任务。\n";
-
-   sleep(1);
-
-  }
-
- }
-
- else
-
- { // 子进程的流程。
-
-  sleep(5);
-
-  // int *p=0; *p=10;
-
-  exit(1);
-
- }
-
-}
+```
 
 ## 多进程与信号
 
