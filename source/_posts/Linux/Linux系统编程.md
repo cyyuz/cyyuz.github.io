@@ -1254,71 +1254,66 @@ int kill(pid_t pid, int sig);
 
 共享内存没有提供锁机制，也就是说，在某一个进程对共享内存进行读/写的时候，不会阻止其它进程对它的读/写。如果要对共享内存的读/写加锁，可以使用信号量。
 
-Linux中提供了一组函数用于操作共享内存。
-
-## 一、shmget函数
-
-该函数用于创建/获取共享内存。
-
-int shmget(key_t key, size_t size, int shmflg);
-
-key    共享内存的键值，是一个整数（typedef unsigned int key_t），一般采用十六进制，例如0x5005，不同共享内存的key不能相同。
-
-size   共享内存的大小，以字节为单位。
-
-shmflg 共享内存的访问权限，与文件的权限一样，例如0666|IPC_CREAT，0666表示全部用户对它可读写，IPC_CREAT表示如果共享内存不存在，就创建它。
-
-返回值：成功返回共享内存的id（一个非负的整数），失败返回-1（系统内存不足、没有权限）
-
-用ipcs -m可以查看系统的共享内存，包括：键值（key），共享内存id（shmid），拥有者（owner），权限（perms），大小（bytes）。
-
-​                               
+用ipcs -m可以查看系统的共享内存，包括：键值（key），共享内存id（shmid），拥有者（owner），权限（perms），大小（bytes）。                               
 
 用ipcrm -m 共享内存id可以手工删除共享内存，如下：
 
- 
+Linux中提供了一组函数用于操作共享内存。
 
-## 二、shmat函数
+**shmget函数声明：**
 
-该函数用于把共享内存连接到当前进程的地址空间。
+```c++
+/**
+ * @brief 创建/获取共享内存
+ * @param key 共享内存的键值，是一个整数（unsigned int），一般采用十六进制，不同共享内存的key不能相同。
+ * @param size 共享内存的大小，以字节为单位。
+ * @param shmflg 共享内存的访问权限，与文件的权限一样。
+ *               例如0666|IPC_CREAT，0666表示全部用户对它可读写，IPC_CREAT表示如果共享内存不存在，就创建它。
+ * @return 成功返回共享内存的id（一个非负的整数），失败返回-1（系统内存不足、没有权限）
+ */
+int shmget(key_t key, size_t size, int shmflg);
+```
 
+**shmat函数声明：**
+
+```c++
+/**
+ * @brief 把共享内存连接到当前进程的地址空间
+ * @param shmid 共享内存的id，由shmget()函数返回的。
+ * @param shmaddr 指定共享内存连接到当前进程中的地址位置，通常填0，表示让系统来选择共享内存的地址。
+ * @param shmflg 标志位，通常填0。
+ * @return 成功返回共享内存起始地址，失败返回(void*)-1。
+ */
 void *shmat(int shmid, const void *shmaddr, int shmflg);
+```
 
-shmid    由shmget()函数返回的共享内存标识。
+**shmdt函数声明：**
 
-shmaddr  指定共享内存连接到当前进程中的地址位置，通常填0，表示让系统来选择共享内存的地址。
-
-shmflg    标志位，通常填0。
-
-调用成功时返回共享内存起始地址，失败返回(void*)-1。
-
-## 三、shmdt函数
-
-该函数用于将共享内存从当前进程中分离，相当于shmat()函数的反操作。
-
+```c++
+/**
+ * @brief 把共享内存从当前进程中分离
+ * @param shmaddr shmat()函数返回的地址。
+ * @return 成功返回0，失败返回-1。
+ */
 int shmdt(const void *shmaddr);
+```
 
-shmaddr  shmat()函数返回的地址。
+**shmctl函数声明：**
 
-调用成功时返回0，失败时返回-1。
-
-## 四、shmctl函数
-
-该函数用于操作共享内存，最常用的操作是删除共享内存。
-
+```c++
+/**
+ * @brief 操作共享内存，最常用的操作是删除共享内存。
+ * @param shmid shmget()函数返回的共享内存id。
+ * @param command 操作共享内存的指令，如果要删除共享内存，填IPC_RMID。
+ * @param buf 操作共享内存的数据结构的地址，如果要删除共享内存，填0。
+ * @return 成功返回0，失败返回-1。
+ */
 int shmctl(int shmid, int command, struct shmid_ds *buf);
+```
 
-shmid    shmget()函数返回的共享内存id。
+> **注意**：用root创建的共享内存，不管创建的权限是什么，普通用户无法删除。
 
-command 操作共享内存的指令，如果要删除共享内存，填IPC_RMID。
-
-buf      操作共享内存的数据结构的地址，如果要删除共享内存，填0。
-
-调用成功时返回0，失败时返回-1。
-
-**注意，用root创建的共享内存，不管创建的权限是什么，普通用户无法删除。**
-
-## 五、示例
+[code]
 
 \#include <iostream>
 
