@@ -1254,11 +1254,19 @@ int kill(pid_t pid, int sig);
 
 共享内存没有提供锁机制，也就是说，在某一个进程对共享内存进行读/写的时候，不会阻止其它进程对它的读/写。如果要对共享内存的读/写加锁，可以使用信号量。
 
-用ipcs -m可以查看系统的共享内存，包括：键值（key），共享内存id（shmid），拥有者（owner），权限（perms），大小（bytes）。                               
+**查看系统的共享内存：**
 
-用ipcrm -m 共享内存id可以手工删除共享内存，如下：
+```sh
+$ ipcs -m
 
-Linux中提供了一组函数用于操作共享内存。
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch     status
+0x00005005 0          cyyu       640        56         0
+(键值)   (共享内存id)  (拥有者)     (权限)      (大小)  
+
+# 删除共享内存
+$ ipcrm -m 0(shmid)
+```
 
 **shmget函数声明：**
 
@@ -1313,109 +1321,9 @@ int shmctl(int shmid, int command, struct shmid_ds *buf);
 
 > **注意**：用root创建的共享内存，不管创建的权限是什么，普通用户无法删除。
 
-[code]
+**示例：**
 
-\#include <iostream>
-
-\#include <cstdio>
-
-\#include <cstdlib>
-
-\#include <cstring>
-
-\#include <unistd.h>
-
-\#include <sys/ipc.h>
-
-\#include <sys/shm.h>
-
-using namespace std;
-
- 
-
-struct stgirl   // 超女结构体。
-
-{
-
- int no;    // 编号。
-
- char name[51]; // 姓名，注意，不能用string。
-
-};
-
- 
-
-int main(int argc,char *argv[])
-
-{
-
- if (argc!=3) { cout << "Using:./demo no name\n"; return -1; }
-
- 
-
- // 第1步：创建/获取共享内存，键值key为0x5005，也可以用其它的值。
-
- int shmid=shmget(0x5005, sizeof(stgirl), 0640|IPC_CREAT);
-
- if ( shmid ==-1 )
-
- {
-
-  cout << "shmget(0x5005) failed.\n"; return -1;
-
- }
-
- 
-
- cout << "shmid=" << shmid << endl;
-
- 
-
- // 第2步：把共享内存连接到当前进程的地址空间。
-
- stgirl *ptr=(stgirl *)shmat(shmid,0,0);
-
- if ( ptr==(void *)-1 )
-
- {
-
-  cout << "shmat() failed\n"; return -1;
-
- }
-
- 
-
- // 第3步：使用共享内存，对共享内存进行读/写。
-
- cout << "原值：no=" << ptr->no << ",name=" << ptr->name << endl; // 显示共享内存中的原值。
-
- ptr->no=atoi(argv[1]);    // 对超女结构体的no成员赋值。
-
- //strcpy(ptr->name,argv[2]);  // 对超女结构体的name成员赋值。
-
- ptr->name=argv[2];
-
- cout << "新值：no=" << ptr->no << ",name=" << ptr->name << endl; // 显示共享内存中的当前值。
-
- 
-
- // 第4步：把共享内存从当前进程中分离。
-
- shmdt(ptr);
-
- 
-
- // 第5步：删除共享内存。
-
- //if (shmctl(shmid,IPC_RMID,0)==-1)
-
- //{
-
-  // cout << "shmctl failed\n"; return -1;
-
- //}
-
-}
+[code](https://github.com/cyyuz/Cpp/blob/main/src/%E6%B0%94%E8%B1%A1%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83/19-7%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/demo1.cpp)
 
 ## 循环队列
 
