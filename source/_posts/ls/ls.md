@@ -68,6 +68,83 @@ Linux内核的进程调度算法（CFS），epoll事件管理，nginx的定时�
 
 # 网络编程
 
+## socket
+
+[code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io%E5%A4%8D%E7%94%A8/socket_server1.cpp)
+
+```c++
+/**
+ * @brief 创建 socket 文件描述符
+ * @param domain 套接字族，AF_INET (IPv4) 或 AF_INET6 (IPv6)
+ * @param type 套接字类型，SOCK_STREAM (TCP) 或 SOCK_DGRAM (UDP)
+ * @param protocol 协议，通常为 0
+ * @return 返回 socket 文件描述符，-1 表示出错
+ */
+int socket(int domain, int type, int protocol);
+
+/**
+ * @brief 绑定 socket 到指定的 IP 地址和端口号
+ * @param socket socket 文件描述符
+ * @param address 指向 sockaddr 结构体的指针，包含 IP 地址和端口号
+ * @param address_len sockaddr 结构体的大小
+ * @return 成功返回 0，失败返回 -1
+ */
+int bind(int socket, const struct sockaddr *address, socklen_t address_len);
+
+/**
+ * @brief 监听 socket，准备接受连接
+ * @param socket socket 文件描述符
+ * @param backlog 连接队列的最大长度
+ * @return 成功返回 0，失败返回 -1
+ */
+int listen(int socket, int backlog);
+
+/**
+ * @brief 接受连接
+ * @param socket socket 文件描述符
+ * @param address 指向 sockaddr 结构体的指针，用于存储连接客户端的 IP 地址和端口号
+ * @param address_len 指向 socklen_t 类型的指针，用于存储 sockaddr 结构体的大小
+ * @return 返回新的 socket 文件描述符，失败返回 -1
+ */
+int accept(int socket, struct sockaddr *address, socklen_t *address_len);
+
+/**
+ * @brief 连接到服务器
+ * @param socket socket 文件描述符
+ * @param address 指向 sockaddr 结构体的指针，包含服务器的 IP 地址和端口号
+ * @param address_len sockaddr 结构体的大小
+ * @return 成功返回 0，失败返回 -1
+ */
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+
+/**
+ * @brief 发送数据
+ * @param socket socket 文件描述符
+ * @param buffer 指向要发送的数据的指针
+ * @param length 要发送的数据的长度
+ * @param flags 发送标志，通常为 0
+ * @return 返回实际发送的字节数，失败返回 -1
+ */
+ssize_t send(int socket, const void *buffer, size_t length, int flags);
+
+/**
+ * @brief 接收数据
+ * @param socket socket 文件描述符
+ * @param buffer 指向接收数据的缓冲区的指针
+ * @param length 缓冲区的大小
+ * @param flags 接收标志，通常为 0
+ * @return 返回实际接收到的字节数，失败返回 -1
+ */
+ssize_t recv(int socket, void *buffer, size_t length, int flags);
+
+/**
+ * @brief 关闭 socket
+ * @param socket socket 文件描述符
+ * @return 成功返回 0，失败返回 -1
+ */
+int close(int socket);
+```
+
 ## io复用
 
 ### 阻塞和非阻塞
@@ -76,11 +153,15 @@ Linux内核的进程调度算法（CFS），epoll事件管理，nginx的定时�
 
 非阻塞：当调用一个函数时，函数立即返回，不会阻塞当前线程。即使操作尚未完成，线程仍然可以继续执行其他任务。非阻塞模式通常需要通过轮询或事件驱动机制来处理操作完成后的结果。
 
-### 水平触发
+### 事件触发
+
+水平触发： 
 
 如果事件和数据已经在缓冲区里，程序调用select()时会报告事件，数据也不会丢失；
 
 如果select()已经报告了事件，但是程序没有处理它，下次调用select()的时候会重新报告。
+
+边沿触发：
 
 ### 事件
 
@@ -145,13 +226,13 @@ select用位图（bitmap）表示socket的集合，
 
 [code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io%E5%A4%8D%E7%94%A8/poll.cpp)
 
-poll模型：可以管理更多的客户端连接，但是连接越多，性能线性下降。
+可以管理更多的客户端连接，但是连接越多，性能线性下降。
 
 ### epoll
 
 [code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io%E5%A4%8D%E7%94%A8/poll.cpp)
 
-```
+```c++
 // 创建句柄
 int epoll_create(int size);   
 
@@ -160,13 +241,32 @@ int epoll_ctl(int epfd,int op,int fd,struct epoll_event *event);
 
 // 等待事件
 int epoll_wait(int epfd,struct epoll_event *events,int maxevents,int timeout);
-
-struct epoll_event{
-    uint32_t events;
-    epoll_data_t data;
-};
 ```
 
 epoll没有内存拷贝，没有轮询，没有遍历。
 
 - epoll：只要内存够，管理连接数没有上限，性能不会下降。
+
+epoll是不是线程安全的？可以不推荐   加锁影响性能
+
+### reactor
+
+io未读完的数据不好存储
+
+函数指针？
+
+reactor是什么
+
+
+
+事件驱动 回调函数
+
+
+
+好处是什么？
+
+业务网络隔离
+
+
+
+rbuffer不够长怎么办
