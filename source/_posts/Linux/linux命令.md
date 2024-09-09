@@ -19,3 +19,10 @@ categories:
 # scp
 
 # ulimit 
+
+
+
+sysctl
+
+-p
+
