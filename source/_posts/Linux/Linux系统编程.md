@@ -180,24 +180,6 @@ int setenv(const char *name, const char *value, int overwrite);
 char *getenv(const char *name);
 ```
 
-# Linux命令
-
-## man
-
-**1-用户命令**；2-系统接口；**3-库函数**；4-特殊文件，比如设备文件；5-文件；
-
-6-游戏；7-系统的软件包；8-系统管理命令；9-内核。
-
-## ln
-
-
-
-## scp
-
-## ulimit 
-
-
-
 # Linux时间操作
 
 UNIX操作系统根据计算机产生的年代把1970年1月1日作为UNIX的纪元时间，1970年1月1日是时间的中间点，将从1970年1月1日起经过的秒数用一个整数存放。

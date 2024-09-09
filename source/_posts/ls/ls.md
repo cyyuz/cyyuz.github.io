@@ -8,7 +8,7 @@ tags:
 
 ## 红黑树
 
-[code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E7%BA%A2%E9%BB%91%E6%A0%91/rbtree.cpp)
+[code](https://github.com/cyyuz/code-demos/blob/main/src/linux-server/01.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E7%BA%A2%E9%BB%91%E6%A0%91/rbtree.cpp)
 
 **红黑树用途：**
 
@@ -70,7 +70,7 @@ Linux内核的进程调度算法（CFS），epoll事件管理，nginx的定时�
 
 ## socket
 
-[code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io%E5%A4%8D%E7%94%A8/socket_server1.cpp)
+[code](https://github.com/cyyuz/code-demos/blob/main/src/linux-server/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io_multiplexing/socket_server1.cpp)
 
 ```c++
 /**
@@ -163,6 +163,16 @@ int close(int socket);
 
 边沿触发：
 
+**水平触发（Level-Triggered）**
+
+如果事件和数据已经在缓冲区里，程序调用 select() 时会报告事件，数据也不会丢失；
+
+如果 select() 已经报告了事件，但是程序没有处理它，下次调用 select() 的时候会重新报告。
+
+**边沿触发（Edge-Triggered）**
+
+当事件的状态发生变化时，只报告一次。这意味着如果数据到达并触发了事件，但程序没有立即处理它，那么在数据被读取之前，这个事件不会再次被报告。
+
 ### 事件
 
 **可读事件：**
@@ -193,7 +203,7 @@ int close(int socket);
 
 ### select
 
-[code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io%E5%A4%8D%E7%94%A8/select.cpp)
+[code](https://github.com/cyyuz/code-demos/blob/main/src/linux-server/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io_multiplexing/select.cpp)
 
 `select` 是一个用于异步 I/O 多路复用的函数，在网络编程中非常有用。它允许一个进程监视多个文件描述符（通常是套接字），并等待其中一个或多个文件描述符变为可读、可写或出现异常。
 
@@ -224,13 +234,13 @@ select用位图（bitmap）表示socket的集合，
 
 ### poll
 
-[code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io%E5%A4%8D%E7%94%A8/poll.cpp)
+[code](https://github.com/cyyuz/code-demos/blob/main/src/linux-server/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io_multiplexing/poll.cpp)
 
 可以管理更多的客户端连接，但是连接越多，性能线性下降。
 
 ### epoll
 
-[code](https://github.com/cyyuz/Cpp/blob/main/src/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io%E5%A4%8D%E7%94%A8/poll.cpp)
+[code](https://github.com/cyyuz/code-demos/blob/main/src/linux-server/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io_multiplexing/epoll.cpp)
 
 ```c++
 // 创建句柄
@@ -247,32 +257,18 @@ epoll没有内存拷贝，没有轮询，没有遍历。
 
 - epoll：只要内存够，管理连接数没有上限，性能不会下降。
 
-epoll是不是线程安全的？可以不推荐   加锁影响性能
-
 ### reactor
 
-io未读完的数据不好存储
+[code](https://github.com/cyyuz/code-demos/blob/main/src/linux-server/02.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/io_multiplexing/reactor1.cpp)
 
-函数指针？
+Reactor 是一种用于处理并发事件的设计模式，通常用于 I/O 多路复用 环境。它通过一个事件循环等待事件的到来，然后分发这些事件给相应的处理程序进行处理。Reactor 模式广泛应用于网络编程和服务器端开发。
 
-reactor是什么
+- 事件循环（Event Loop）：Reactor 模式的核心是一个循环，负责监听和捕获输入/输出事件。
 
+- 事件分发器（Dispatcher）：一旦事件被捕获，Reactor 将事件分发给相应的处理程序。
 
+- 事件处理程序（Handler）：这是实际处理事件的代码。处理程序与事件关联，通常对应某种 I/O 操作（如读取、写入、连接等）。
 
-事件驱动 回调函数
-
-
-
-好处是什么？
+Reactor 模式可以在不使用多线程或多进程的情况下高效处理大量的并发连接，特别适合处理大量 I/O 事件的场景，如网络服务器。
 
 业务网络隔离
-
-
-
-rbuffer不够长怎么办
-
-
-
-
-
-并发？
