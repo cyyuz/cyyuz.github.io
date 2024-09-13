@@ -4,6 +4,7 @@ date: 2024-08-29 11:03:28
 tags: [vim]
 categories:
 - [技术, linux]
+index_img: img/vim/文章封面.png
 ---
 
 <table>

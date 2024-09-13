@@ -2,6 +2,7 @@
 title: ls
 date: 2024-08-31 16:38:24
 tags:
+index_img: img/ls/文章封面.png
 ---
 
 # 数据结构

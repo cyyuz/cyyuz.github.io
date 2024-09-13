@@ -4,6 +4,7 @@ date: 2024-09-09 13:56:21
 tags:
 categories:
 - [技术, linux]
+index_img: img/linux命令/文章封面.png
 ---
 
 # man
