@@ -296,5 +296,12 @@ qps  最大时延 新建（建链）  吞吐量
 
 [code](https://github.com/cyyuz/code-demos/blob/main/src/linux-server/2.%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/network_protocol/http.cpp)
 
+
+
+0拷贝？  dma？
+
+
+
+web:reactor request/response   并发量测出来   支持index.html/png       header存储k/v存储
 ## websocket
 
