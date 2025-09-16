@@ -1,0 +1,813 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E7%BD%91%E7%AB%99/%E5%A4%B4%E5%83%8F.png">
+  <link rel="icon" href="/img/%E7%BD%91%E7%AB%99/%E5%A4%B4%E5%83%8F.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="CyYu">
+  <meta name="keywords" content="">
+  
+    <meta property="og:type" content="website">
+<meta property="og:title" content="CyYu&#39;s Blog">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="CyYu&#39;s Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="CyYu">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>CyYu&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CyYu&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/%E7%BD%91%E7%AB%99/%E9%A6%96%E9%A1%B5%E5%A4%B4%E5%9B%BE.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">An elegant Material-Design theme for Hexo</span>
+          
+        </div>
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          style="margin-top: 0">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/09/15/%E9%A5%A5%E8%8D%92%E6%B8%B8%E6%88%8F/%E9%A5%A5%E8%8D%92%E6%94%BB%E7%95%A5/" target="_self">
+          饥荒种地攻略
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/09/15/%E9%A5%A5%E8%8D%92%E6%B8%B8%E6%88%8F/%E9%A5%A5%E8%8D%92%E6%94%BB%E7%95%A5/" target="_self">
+        <div>
+          本文提供《饥荒》中可种植植物的信息与种植方案，详细列出了14种可种植植物的季节适应性、水消耗、肥料效果等属性，提供最佳植物组合推荐。 点击下方链接查看完整的交互式指南： 打开饥荒植物种植交互式指南
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-09-15 09:46" pubdate>
+              2025-09-15
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%A5%A5%E8%8D%92/" class="category-chain-item">饥荒</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E9%A5%A5%E8%8D%92/%E6%B8%B8%E6%88%8F/" class="category-chain-item">游戏</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E9%A5%A5%E8%8D%92/">#饥荒</a>
+            
+              <a href="/tags/%E6%A4%8D%E7%89%A9%E7%A7%8D%E6%A4%8D/">#植物种植</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/08/29/Linux/vim/" target="_self">
+          <img src="/img/vim/%E6%96%87%E7%AB%A0%E5%B0%81%E9%9D%A2.png" srcset="/img/loading.gif" lazyload alt="vim">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/08/29/Linux/vim/" target="_self">
+          vim
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/08/29/Linux/vim/" target="_self">
+        <div>
+          功能         操作          描述                     撤销           u          撤销最近的操作，多次按下，撤销多个操作                    Ctrl+r          恢复上一步被撤销的操作                    :u!          撤销所有修改
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-08-29 11:03" pubdate>
+              2024-08-29
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%8A%80%E6%9C%AF/linux/" class="category-chain-item">linux</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/vim/">#vim</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/07/21/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E6%96%87%E8%AF%BE/" target="_self">
+          <img src="/img/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E6%96%87%E8%AF%BE.png" srcset="/img/loading.gif" lazyload alt="文课">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/07/21/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E6%96%87%E8%AF%BE/" target="_self">
+          文课
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/07/21/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E6%96%87%E8%AF%BE/" target="_self">
+        <div>
+          口不絕於諷誦諷和誦在這裡是一樣意思，朗讀、背誦、念。 但是『誦』還有著它特殊的意思，本意是一種抑揚頓挫，有高低音、長短音的一種讀書的聲音。 与朱元思书與朱元思書吳均（梁） 風煙俱浄，天山共色。從流飄蕩，任意東西。自富陽至桐廬，一百許里，奇山異水，天下獨絶。水皆縹碧，千丈見底，遊魚細石，直視無礙。急湍甚箭，猛浪若奔。夾岸高山，皆生寒樹。負勢競上，互相軒邈；爭高直指，千百成峰。泉水激石，泠泠作響；好鳥
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-07-21 23:31" pubdate>
+              2024-07-21
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/" class="category-chain-item">筑基课笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/06/27/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%AD%97%E8%AF%BE/" target="_self">
+          <img src="/img/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%AD%97%E8%AF%BE.jpg" srcset="/img/loading.gif" lazyload alt="字课">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/06/27/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%AD%97%E8%AF%BE/" target="_self">
+          字课
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/06/27/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%AD%97%E8%AF%BE/" target="_self">
+        <div>
+          單獨的不可分解的象形字、指事字都統稱為是文，合體的、可以分解的形聲字和會意字則叫做字。 健康篇健康健的含义 建有引出的意思，《說文》“建，立朝律也”。引申為創造、設立。 建加上其他偏旁組成的字，有力的意思。肌腱、腱子肉、健胃。 伉：匹敵、抗衡、亢奮、有力，與“健”相似。“伉健”同用，意思就是堅強有力。 健：有力、有氣、有神。氣足有力，精充血足。 元氣足則神明健，穀氣足則體健。穀氣來自於人體對外來飲
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-06-27 22:56" pubdate>
+              2024-06-27
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/" class="category-chain-item">筑基课笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/%E5%AD%97%E8%AF%BE/" class="category-chain-item">字课</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/06/25/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%B8%88%E6%89%BF%E6%BA%90%E6%B5%81/" target="_self">
+          <img src="/img/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%B8%88%E6%89%BF%E6%BA%90%E6%B5%81.jpg" srcset="/img/loading.gif" lazyload alt="师承源流">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/06/25/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%B8%88%E6%89%BF%E6%BA%90%E6%B5%81/" target="_self">
+          师承源流
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/06/25/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E5%B8%88%E6%89%BF%E6%BA%90%E6%B5%81/" target="_self">
+        <div>
+          周稔豐缘起巨闕穴巨闕是心的募穴，膻中穴在胸口正中。 人這個東西不光是物質。中醫理論講 “精氣神”，有形有質的東西可以叫精。但是這些東西化是陽化氣、陰成形，分解到最後就不光是物質，而是能量了。而且中醫認識的很高級，在能量的背後還有東西，就是“神”的概念。 鍼是一種交流，是一種感。咸是一個卦象，少男見少女那種動心的感覺，加個心字邊就是感。紮鍼，要紮到讓醫生和患者的氣有交流有呼應，有得氣有行氣的感覺，那
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-06-25 23:45" pubdate>
+              2024-06-25
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/" class="category-chain-item">筑基课笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/06/25/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E9%86%AB%E4%B8%AD%E7%99%BE%E8%AA%A4%E6%AD%8C/" target="_self">
+          醫中百誤歌
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/06/25/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E9%86%AB%E4%B8%AD%E7%99%BE%E8%AA%A4%E6%AD%8C/" target="_self">
+        <div>
+          医家误医中之误有百端，漫说肘后尽金丹。  漫说：别说，不要说。 肘后：古人出门时把常用的书装在囊内，囊带挂在肩上，囊身附在手肘之后，称为肘后，也就是随身携带的。晋代葛洪尚著有《肘后备急方》，亦常简称为《肘后方》。所以肘后一般多指医书或药方，这里的“肘后”系指常用的药方。 金丹：形容很有效验的药方或治法。   先将医误从头数，指点分明见一斑。   一斑：此喻医误中的一小部分。 典故来源于《晋书·王羲
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-06-25 20:15" pubdate>
+              2024-06-25
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/" class="category-chain-item">筑基课笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/%E5%B8%88%E6%89%BF%E6%BA%90%E6%B5%81/" class="category-chain-item">师承源流</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/06/19/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E7%90%86%E8%AF%BE/" target="_self">
+          <img src="/img/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E7%90%86%E8%AF%BE.jpg" srcset="/img/loading.gif" lazyload alt="理课">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/06/19/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E7%90%86%E8%AF%BE/" target="_self">
+          理课
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/06/19/%E7%AD%91%E5%9F%BA%E8%AF%BE/%E7%90%86%E8%AF%BE/" target="_self">
+        <div>
+          認識知覺感悟解惑“疑”是相信負面，徐老師說過，人和人的關係有三種，第一種叫我相信你，第二種叫我不相信你，第三種是我懷疑你。相信負面甚至惡意揣測別人，叫做“疑”。什麼都不懂，叫做“蒙”。傷寒論裏說人“濛濛昧昧，蠢若遊魂”。“惑”的意思是不確定，知道的太多，但是不知道該選哪條路。 學習中醫要想入門，要想解惑，最重要的是恢復我們的覺和感。人類認知世界的方式，徐老師總結了六個字，認、識、知、覺、感、悟。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-06-19 09:44" pubdate>
+              2024-06-19
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/" class="category-chain-item">筑基课笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AD%91%E5%9F%BA%E8%AF%BE%E7%AC%94%E8%AE%B0/%E7%90%86%E8%AF%BE/" class="category-chain-item">理课</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      京ICP备2024084751号-1
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=https://beian.miit.gov.cn"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/%E7%BD%91%E7%AB%99/foot-ga.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>京公网安备11010502055853号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

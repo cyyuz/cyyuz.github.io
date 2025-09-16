@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>饥荒植物种植综合指南</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .search-section {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            min-width: 150px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        tr:hover {
+            background-color: #f0f7ff;
+            cursor: pointer;
+        }
+        .season-available {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        .fertilizer-positive {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .fertilizer-negative {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .combination-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            border: 1px solid #b0e0e6;
+        }
+        .combination-title {
+            color: #1e3a8a;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .combinations-enum {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .combination-item {
+            margin: 8px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            border-left: 3px solid #4CAF50;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .combination-item:hover {
+            background-color: #e8f5e8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .combination-plants {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+        .combination-details {
+            font-size: 14px;
+            color: #555;
+        }
+        .no-combination {
+            color: #666;
+            font-style: italic;
+            padding: 10px;
+            text-align: center;
+        }
+        .season-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            margin: 0 2px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #555;
+        }
+        .season-tag.spring { background-color: #a5d6a7; color: #2e7d32; }
+        .season-tag.summer { background-color: #ffcc80; color: #e65100; }
+        .season-tag.autumn { background-color: #ef9a9a; color: #c62828; }
+        .season-tag.winter { background-color: #90caf9; color: #0d47a1; }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+        .highlight-row {
+            background-color: #e3f2fd !important;
+            font-weight: bold;
+        }
+        .show-combination-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .show-combination-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>饥荒植物种植综合指南</h1>
+        
+        <div class="filter-section">
+            <div class="search-section">
+                <div class="filter-group">
+                    <label for="plantSearch">植物搜索：</label>
+                    <input type="text" id="plantSearch" placeholder="输入植物名称搜索">
+                </div>
+                <div class="filter-group">
+                    <label for="seasonSelect">季节筛选：</label>
+                    <select id="seasonSelect">
+                        <option value="all">全部季节</option>
+                        <option value="spring">春季</option>
+                        <option value="summer">夏季</option>
+                        <option value="autumn">秋季</option>
+                        <option value="winter">冬季</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4CAF50;"></div>
+                    <span>季节适宜</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #f44336;"></div>
+                    <span>负肥料效果</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4CAF50;"></div>
+                    <span>正肥料效果</span>
+                </div>
+            </div>
+        </div>
+        
+        <table id="plantsTable">
+            <thead>
+                <tr>
+                    <th>植物名称</th>
+                    <th>春季</th>
+                    <th>夏季</th>
+                    <th>秋季</th>
+                    <th>冬季</th>
+                    <th>水消耗</th>
+                    <th>催长剂</th>
+                    <th>堆肥</th>
+                    <th>粪肥</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 数据将通过JavaScript动态生成 -->
+            </tbody>
+        </table>
+
+        <!-- 植物组合详情区域 -->
+        <div class="combination-section">
+            <h2 class="combination-title">植物组合种植指南</h2>
+            <p>以下是各植物在同一季节中能使催长剂、堆肥和粪肥总和为0的最佳组合：</p>
+            <div id="plantCombinations"></div>
+        </div>
+    </div>
+
+    <script>
+        // 植物数据
+        const plants = [
+            { name: '芦笋', spring: 1, summer: 0, autumn: 0, winter: 1, water: 1, growthFormula: 1, compost: -2, manure: 1 },
+            { name: '胡萝卜', spring: 1, summer: 0, autumn: 1, winter: 1, water: 1, growthFormula: -2, compost: 1, manure: 1 },
+            { name: '玉米', spring: 1, summer: 1, autumn: 1, winter: 0, water: 1, growthFormula: 1, compost: -2, manure: 1 },
+            { name: '火龙果', spring: 1, summer: 1, autumn: 0, winter: 0, water: 2, growthFormula: 2, compost: 2, manure: -4 },
+            { name: '榴莲', spring: 1, summer: 0, autumn: 0, winter: 0, water: 1, growthFormula: 2, compost: -4, manure: 2 },
+            { name: '茄子', spring: 1, summer: 0, autumn: 1, winter: 0, water: 2, growthFormula: 1, compost: 1, manure: -2 },
+            { name: '大蒜', spring: 1, summer: 1, autumn: 1, winter: 1, water: 1, growthFormula: 2, compost: -4, manure: 2 },
+            { name: '洋葱', spring: 1, summer: 1, autumn: 1, winter: 0, water: 2, growthFormula: -4, compost: 2, manure: 2 },
+            { name: '辣椒', spring: 0, summer: 1, autumn: 1, winter: 0, water: 1, growthFormula: 2, compost: 2, manure: -4 },
+            { name: '石榴', spring: 1, summer: 1, autumn: 0, winter: 0, water: 2, growthFormula: -4, compost: 2, manure: 2 },
+            { name: '土豆', spring: 1, summer: 0, autumn: 1, winter: 1, water: 1, growthFormula: 1, compost: 1, manure: -2 },
+            { name: '南瓜', spring: 0, summer: 0, autumn: 1, winter: 1, water: 2, growthFormula: -2, compost: 1, manure: 1 },
+            { name: '番茄', spring: 1, summer: 1, autumn: 1, winter: 0, water: 3, growthFormula: -1, compost: -1, manure: 2 },
+            { name: '西瓜', spring: 1, summer: 1, autumn: 0, winter: 0, water: 3, growthFormula: 2, compost: -1, manure: -1 }
+        ];
+
+        // 获取DOM元素
+        const tableBody = document.getElementById('plantsTable').querySelector('tbody');
+        const seasonSelect = document.getElementById('seasonSelect');
+        const plantSearch = document.getElementById('plantSearch');
+        const plantCombinations = document.getElementById('plantCombinations');
+
+        // 获取季节的中文名称
+        const seasonNames = { spring: '春季', summer: '夏季', autumn: '秋季', winter: '冬季' };
+
+        // 渲染表格数据
+        function renderTable() {
+            // 清空表格
+            tableBody.innerHTML = '';
+
+            // 获取筛选条件
+            const selectedSeason = seasonSelect.value;
+            const searchTerm = plantSearch.value.toLowerCase();
+
+            // 过滤并渲染植物数据
+            plants.forEach(plant => {
+                // 根据季节和搜索词过滤
+                const seasonMatch = selectedSeason === 'all' || plant[selectedSeason] === 1;
+                const searchMatch = plant.name.toLowerCase().includes(searchTerm);
+                
+                if (seasonMatch && searchMatch) {
+                    const row = document.createElement('tr');
+                    
+                    // 添加点击事件以突出显示相关组合
+                    row.addEventListener('click', () => {
+                        highlightPlantCombinations(plant.name);
+                    });
+                    
+                    // 添加植物名称
+                    row.innerHTML += `<td>${plant.name}</td>`;
+                    
+                    // 添加季节数据
+                    ['spring', 'summer', 'autumn', 'winter'].forEach(season => {
+                        const cellClass = plant[season] === 1 ? 'season-available' : '';
+                        row.innerHTML += `<td class="${cellClass}">${plant[season] === 1 ? '✓' : '—'}</td>`;
+                    });
+                    
+                    // 添加水消耗
+                    row.innerHTML += `<td>${plant.water}</td>`;
+                    
+                    // 添加肥料数据
+                    [plant.growthFormula, plant.compost, plant.manure].forEach(value => {
+                        const cellClass = value > 0 ? 'fertilizer-positive' : value < 0 ? 'fertilizer-negative' : '';
+                        row.innerHTML += `<td class="${cellClass}">${value}</td>`;
+                    });
+                    
+                    // 添加显示组合按钮
+                    const showBtnCell = document.createElement('td');
+                    const showBtn = document.createElement('button');
+                    showBtn.className = 'show-combination-btn';
+                    showBtn.textContent = '显示组合';
+                    showBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // 阻止事件冒泡
+                        showPlantCombinations(plant.name);
+                    });
+                    showBtnCell.appendChild(showBtn);
+                    row.appendChild(showBtnCell);
+                    
+                    tableBody.appendChild(row);
+                }
+            });
+        }
+
+        // 获取各季节的植物
+        function getPlantsBySeason(season) {
+            return plants.filter(plant => plant[season] === 1);
+        }
+
+        // 查找两植物组合
+        function findTwoPlantCombinations(seasonPlants) {
+            const results = [];
+            const n = seasonPlants.length;
+            
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    const sumGrowth = seasonPlants[i].growthFormula + seasonPlants[j].growthFormula;
+                    const sumCompost = seasonPlants[i].compost + seasonPlants[j].compost;
+                    const sumManure = seasonPlants[i].manure + seasonPlants[j].manure;
+                    
+                    if (sumGrowth === 0 && sumCompost === 0 && sumManure === 0) {
+                        results.push({ plants: [seasonPlants[i].name, seasonPlants[j].name], seasons: getCommonSeasons(seasonPlants[i], seasonPlants[j]) });
+                    }
+                }
+            }
+            
+            return results;
+        }
+
+        // 查找三植物组合
+        function findThreePlantCombinations(seasonPlants) {
+            const results = [];
+            const n = seasonPlants.length;
+            
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    for (let k = j + 1; k < n; k++) {
+                        const sumGrowth = seasonPlants[i].growthFormula + seasonPlants[j].growthFormula + seasonPlants[k].growthFormula;
+                        const sumCompost = seasonPlants[i].compost + seasonPlants[j].compost + seasonPlants[k].compost;
+                        const sumManure = seasonPlants[i].manure + seasonPlants[j].manure + seasonPlants[k].manure;
+                        
+                        if (sumGrowth === 0 && sumCompost === 0 && sumManure === 0) {
+                            results.push({ plants: [seasonPlants[i].name, seasonPlants[j].name, seasonPlants[k].name], seasons: getCommonSeasons(seasonPlants[i], seasonPlants[j], seasonPlants[k]) });
+                        }
+                    }
+                }
+            }
+            
+            return results;
+        }
+
+        // 获取多个植物的共同生长季节
+        function getCommonSeasons(...plants) {
+            const seasons = ['spring', 'summer', 'autumn', 'winter'];
+            return seasons.filter(season => plants.every(plant => plant[season] === 1));
+        }
+
+        // 获取所有唯一的植物组合
+        function getAllUniqueCombinations() {
+            const allCombinations = [];
+            const seasons = ['spring', 'summer', 'autumn', 'winter'];
+            
+            // 收集所有季节的组合
+            seasons.forEach(season => {
+                const seasonPlants = getPlantsBySeason(season);
+                const twoPlantCombos = findTwoPlantCombinations(seasonPlants);
+                const threePlantCombos = findThreePlantCombinations(seasonPlants);
+                allCombinations.push(...twoPlantCombos, ...threePlantCombos);
+            });
+            
+            // 去重（同一组合可能在多个季节中出现）
+            const uniqueCombinations = [];
+            const seen = new Set();
+            
+            allCombinations.forEach(combo => {
+                const key = combo.plants.sort().join('+');
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    uniqueCombinations.push(combo);
+                }
+            });
+            
+            return uniqueCombinations;
+        }
+
+        // 渲染植物组合详情
+        function renderPlantCombinations() {
+            const allCombinations = getAllUniqueCombinations();
+            const selectedSeason = seasonSelect.value;
+            const searchTerm = plantSearch.value.toLowerCase();
+            
+            // 应用过滤条件
+            const filteredCombinations = allCombinations.filter(combo => {
+                // 季节过滤
+                const seasonMatch = selectedSeason === 'all' || combo.seasons.includes(selectedSeason);
+                
+                // 搜索过滤（检查组合中是否有任一植物名称包含搜索词）
+                const searchMatch = combo.plants.some(plantName => 
+                    plantName.toLowerCase().includes(searchTerm)
+                );
+                
+                return seasonMatch && searchMatch;
+            });
+            
+            let html = '';
+            
+            if (filteredCombinations.length > 0) {
+                html += `<div class="combinations-enum">`;
+                
+                filteredCombinations.forEach((combo, index) => {
+                    html += `<div class="combination-item" id="combination-${index}">`;
+                    html += `<div class="combination-plants">${combo.plants.join(' + ')}</div>`;
+                    html += `<div class="combination-details">`;
+                    html += `适用季节: ${combo.seasons.map(s => `<span class="season-tag ${s}">${seasonNames[s]}</span>`).join(' ')}`;
+                    html += `</div>`;
+                    html += `</div>`;
+                });
+                
+                html += `</div>`;
+            } else {
+                html = '<p class="no-combination">未找到符合当前筛选条件的植物组合</p>';
+            }
+            
+            plantCombinations.innerHTML = html;
+        }
+
+        // 高亮显示特定植物的组合
+        function highlightPlantCombinations(plantName) {
+            // 滚动到组合区域
+            plantCombinations.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // 移除所有高亮
+            document.querySelectorAll('.combination-item').forEach(el => {
+                el.style.boxShadow = 'none';
+                el.style.border = 'none';
+                el.style.backgroundColor = 'white';
+            });
+            
+            // 高亮包含目标植物的所有组合
+            document.querySelectorAll('.combination-item').forEach(el => {
+                const plantsText = el.querySelector('.combination-plants').textContent;
+                if (plantsText.includes(plantName)) {
+                    el.style.boxShadow = '0 0 0 2px #4CAF50';
+                    el.style.border = '1px solid #4CAF50';
+                    el.style.backgroundColor = '#f9fff9';
+                }
+            });
+        }
+
+        // 显示特定植物的组合
+        function showPlantCombinations(plantName) {
+            // 渲染所有组合
+            renderPlantCombinations();
+            // 高亮显示包含特定植物的组合
+            highlightPlantCombinations(plantName);
+        }
+
+        // 初始渲染
+        renderTable();
+        renderPlantCombinations();
+
+        // 添加事件监听器
+        seasonSelect.addEventListener('change', () => {
+            renderTable();
+            renderPlantCombinations();
+        });
+        
+        plantSearch.addEventListener('input', () => {
+            renderTable();
+            renderPlantCombinations();
+        });
+    </script>
+</body>
+</html>
